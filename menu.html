@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu — Natyffood Café & Coworking Paris 11ème</title>
+    <meta name="description" content="Découvrez notre menu : cafés artisanaux, plats gourmands, desserts maison et plus encore au cœur du Paris 11ème.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        :root {
+            --tangerine: #f98948;
+            --coffee: #684e32;
+            --coffee-dark: #4a3824;
+            --cream: #FAF9F6;
+            --cream-dark: #F5F3ED;
+        }
+
+        * {
+            font-family: 'Source Sans 3', sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 140px;
+        }
+
+        .paper-grain {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.012;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--coffee);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--tangerine);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn-secondary {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-secondary::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: inherit;
+            border: 2px solid var(--coffee);
+            opacity: 0;
+            transform: scale(1.1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-secondary:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .category-tab {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .category-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -4px rgba(104, 78, 50, 0.15);
+        }
+
+        .category-tab.active {
+            background: var(--coffee);
+            color: white;
+            border-color: var(--coffee);
+        }
+
+        .menu-item {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .menu-item:hover {
+            transform: translateX(12px);
+            box-shadow: 0 12px 24px -8px rgba(104, 78, 50, 0.12);
+        }
+
+        .arch-shape {
+            border-radius: 200px 200px 0 0;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%);
+        }
+    </style>
+</head>
+<body class="bg-[#FAF9F6]">
+    <div class="paper-grain"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center py-5">
+                <a href="index.html" class="font-['Playfair_Display'] text-2xl font-bold text-[#684e32] tracking-tight hover:text-[#f98948] transition-colors duration-300">
+                    Natyffood
+                </a>
+
+                <div class="hidden md:flex items-center gap-10">
+                    <a href="index.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Accueil
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="about.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Notre Histoire
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="menu.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Menu
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="reservation.html" class="btn-primary px-7 py-3 bg-[#f98948] text-white text-sm font-medium tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:shadow-xl hover:-translate-y-0.5">
+                        Réserver une Table
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden p-2.5 rounded-full hover:bg-[#684e32]/5 transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6 text-[#684e32]"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="fixed inset-0 bg-[#FAF9F6] z-50 transform translate-x-full transition-transform duration-500 md:hidden">
+            <div class="flex justify-end p-4">
+                <button id="close-menu-btn" class="p-2.5 rounded-full hover:bg-[#684e32]/5 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6 text-[#684e32]"></i>
+                </button>
+            </div>
+            <div class="flex flex-col items-center justify-center h-full gap-10">
+                <a href="index.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Accueil</a>
+                <a href="about.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Notre Histoire</a>
+                <a href="menu.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Menu</a>
+                <a href="reservation.html" class="px-10 py-4 bg-[#f98948] text-white text-lg font-medium tracking-wider uppercase rounded-full hover:bg-[#684e32] transition-all">
+                    Réserver
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-16 md:pt-40 md:pb-24 hero-gradient">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center animate-fade-up">
+                <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-6">La Carte</p>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-[#684e32] leading-[0.95] mb-8">
+                    Notre <em class="text-[#f98948] font-light italic">Menu</em>
+                </h1>
+                <p class="text-xl text-[#684e32]/60 max-w-2xl mx-auto leading-relaxed">
+                    Des créations gourmandes préparées avec passion et des produits d'exception
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Image -->
+    <section class="pb-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="arch-shape overflow-hidden shadow-2xl animate-scale-in delay-2">
+                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=1200&h=600&fit=crop"
+                     alt="Présentation du menu"
+                     class="w-full h-[400px] md:h-[550px] object-cover">
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Categories Navigation -->
+    <section class="py-16 sticky top-0 z-30 bg-[#FAF9F6]/95 backdrop-blur-md border-b border-[#684e32]/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="scrollToCategory('cafe')" class="category-tab px-8 py-3.5 rounded-full border-2 border-[#684e32] text-[#684e32] font-semibold text-sm tracking-wide hover:bg-[#684e32] hover:text-white transition-all">
+                    Café
+                </button>
+                <button onclick="scrollToCategory('petit-dejeuner')" class="category-tab px-8 py-3.5 rounded-full border-2 border-[#684e32] text-[#684e32] font-semibold text-sm tracking-wide hover:bg-[#684e32] hover:text-white transition-all">
+                    Petit-déjeuner
+                </button>
+                <button onclick="scrollToCategory('plats')" class="category-tab px-8 py-3.5 rounded-full border-2 border-[#684e32] text-[#684e32] font-semibold text-sm tracking-wide hover:bg-[#684e32] hover:text-white transition-all">
+                    Plats
+                </button>
+                <button onclick="scrollToCategory('desserts')" class="category-tab px-8 py-3.5 rounded-full border-2 border-[#684e32] text-[#684e32] font-semibold text-sm tracking-wide hover:bg-[#684e32] hover:text-white transition-all">
+                    Desserts
+                </button>
+                <button onclick="scrollToCategory('boissons')" class="category-tab px-8 py-3.5 rounded-full border-2 border-[#684e32] text-[#684e32] font-semibold text-sm tracking-wide hover:bg-[#684e32] hover:text-white transition-all">
+                    Boissons
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Café Section -->
+    <section id="cafe" class="py-20 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center gap-6 mb-12 reveal">
+                <div class="w-16 h-16 bg-gradient-to-br from-[#f98948] to-[#e0783d] rounded-2xl flex items-center justify-center shadow-lg">
+                    <i data-lucide="coffee" class="w-8 h-8 text-white"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-[#684e32]">Nos Cafés</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Espresso</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Café origine Ethiopie, notes fruitées</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">2,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Double Espresso</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Double dose, intensité maximale</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">3,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Cappuccino</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Espresso, lait mousseux, chocolat</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">4,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Latte</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Espresso, lait crémeux, latte art</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">4,80€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Flat White</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Double espresso, micro-mousse</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">4,80€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Café Viennois</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Espresso, chantilly, cacao</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">5,20€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Cold Brew</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Infusion à froid 24h, servi sur glace</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">5,00€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Matcha Latte</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Thé vert matcha bio, lait d'avoine</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">5,50€</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Petit-déjeuner Section -->
+    <section id="petit-dejeuner" class="py-20 bg-white scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center gap-6 mb-12 reveal">
+                <div class="w-16 h-16 bg-gradient-to-br from-[#f98948] to-[#e0783d] rounded-2xl flex items-center justify-center shadow-lg">
+                    <i data-lucide="sun" class="w-8 h-8 text-white"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-[#684e32]">Petit-déjeuner</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Le Classic</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">2 croissants, beurre, confiture, café, jus d'orange</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">9,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Le Gourmand</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Croissant, pain au chocolat, viennoiserie, café, jus</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">12,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Avocado Toast</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Pain grillé, avocat, œuf poché, graines, citron</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">11,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Avoine Bowl</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Porridge, fruits rouges, granola, miel, lait d'avoine</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">9,00€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Pancakes</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">3 pancakes maison, sirop d'érable, fruits, chantilly</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">11,00€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Burger du Matin</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Bun brioche, steak, œuf, bacon, fromage</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">14,50€</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plats Section -->
+    <section id="plats" class="py-20 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center gap-6 mb-12 reveal">
+                <div class="w-16 h-16 bg-gradient-to-br from-[#f98948] to-[#e0783d] rounded-2xl flex items-center justify-center shadow-lg">
+                    <i data-lucide="utensils" class="w-8 h-8 text-white"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-[#684e32]">Plats du Jour</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Quiche du Jour</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Salade verte, vinaigrette maison</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">12,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Club Sandwich</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Pain maison, poulet, bacon, tomate, salade</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">14,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Caesar Salad</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Poulet grillé, parmesan, croûtons, sauce césar</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">13,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Burger Maison</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Steak français, fromage, condiments, frites</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">16,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Pasta del Giorno</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Pâtes fraîches, sauce du chef, parmesan</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">15,00€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Veggie Bowl</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Quinoa, légumes rôtis, houmous, graines</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">13,00€</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Desserts Section -->
+    <section id="desserts" class="py-20 bg-white scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center gap-6 mb-12 reveal">
+                <div class="w-16 h-16 bg-gradient-to-br from-[#f98948] to-[#e0783d] rounded-2xl flex items-center justify-center shadow-lg">
+                    <i data-lucide="cake" class="w-8 h-8 text-white"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-[#684e32]">Desserts Maison</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Cookie Géant</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Chocolat noir, noix de pécan, fleur de sel</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">5,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Cheesecake</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Coulis de fruits rouges, spéculoos</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">7,00€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Brownie</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Chocolat intense, glace vanille</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">6,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Tarte Citron</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Meringuée, pâte sablée maison</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">6,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Crème Brûlée</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Vanille de Madagascar, caramel croustillant</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">7,00€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Paris-Brest</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Crème pralinée noisette, éclats de noisettes</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">7,50€</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Boissons Section -->
+    <section id="boissons" class="py-20 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center gap-6 mb-12 reveal">
+                <div class="w-16 h-16 bg-gradient-to-br from-[#f98948] to-[#e0783d] rounded-2xl flex items-center justify-center shadow-lg">
+                    <i data-lucide="glass-water" class="w-8 h-8 text-white"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-[#684e32]">Boissons</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Jus d'Orange Pressé</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Oranges de saison, fraîchement pressé</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">5,50€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Smoothie Maison</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Fruits de saison, yaourt, miel</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">7,00€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Thé</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Sélection de thés bio, infusions</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">4,00€</span>
+                    </div>
+                </div>
+
+                <div class="menu-item bg-white p-8 rounded-3xl shadow-lg reveal">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-xl font-bold text-[#684e32] mb-2">Limonade Maison</h3>
+                            <p class="text-[#684e32]/50 text-sm leading-relaxed">Citron, menthe, eau gazeuse</p>
+                        </div>
+                        <span class="text-[#f98948] font-bold text-2xl">5,00€</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-28 md:py-36 bg-gradient-to-br from-[#684e32] to-[#4a3824]">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center reveal">
+            <p class="text-sm font-semibold text-[#f9ea9a] tracking-[0.3em] uppercase mb-6">Gourmandise</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-8">
+                Une envie de <em class="text-[#f9ea9a] font-light italic">gourmandise</em> ?
+            </h2>
+            <p class="text-xl text-white/80 mb-12 leading-relaxed">
+                Venez goûter à toutes nos créations au cœur du 11ème arrondissement
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="reservation.html" class="btn-primary px-12 py-5 bg-[#FAF9F6] text-[#684e32] text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-white hover:shadow-2xl hover:-translate-y-1 text-center">
+                    Réserver une Table
+                </a>
+                <a href="index.html" class="btn-secondary px-12 py-5 border-2 border-white text-white text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-white hover:text-[#684e32] text-center">
+                    Retour à l'Accueil
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="py-28 md:py-36 bg-[#FAF9F6]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">Témoignages</p>
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-bold text-[#684e32]">
+                    Ce qu'ils <em class="text-[#f98948] font-light italic">pensent</em>
+                </h2>
+                <div class="flex items-center justify-center gap-4 mt-8">
+                    <div class="flex items-center gap-1">
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                    </div>
+                    <span class="text-2xl font-bold text-[#684e32]">4.9/5</span>
+                    <span class="text-[#684e32]/60">(247 avis)</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="feature-card bg-white p-10 rounded-3xl shadow-xl reveal">
+                    <div class="flex items-center gap-1 mb-6">
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                    </div>
+                    <p class="text-lg text-[#684e32]/80 leading-relaxed mb-8 italic">
+                        "Le cookie géant est divin ! Chocolat intense, fondant à cœur... Je n'en ai jamais mangé d'aussi bon. À recommander absolument !"
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face"
+                                 alt="Camille P."
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#684e32]">Camille P.</p>
+                            <p class="text-sm text-[#684e32]/60">Amatrice de desserts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="feature-card bg-white p-10 rounded-3xl shadow-xl reveal">
+                    <div class="flex items-center gap-1 mb-6">
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                    </div>
+                    <p class="text-lg text-[#684e32]/80 leading-relaxed mb-8 italic">
+                        "Petit-déjeuner remarquable ! Croissants au beurre parfait, avoine bowl délicieux. Un vrai moment de plaisir chaque matin."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face"
+                                 alt="Lucas B."
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#684e32]">Lucas B.</p>
+                            <p class="text-sm text-[#684e32]/60">Habitué du matin</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="feature-card bg-white p-10 rounded-3xl shadow-xl reveal">
+                    <div class="flex items-center gap-1 mb-6">
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                    </div>
+                    <p class="text-lg text-[#684e32]/80 leading-relaxed mb-8 italic">
+                        "Le matcha latte est exceptionnel ! Qualité du matcha au top, lait d'avoine parfait. L'équipe est adorable et le cadre super cosy."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face"
+                                 alt="Emma R."
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#684e32]">Emma R.</p>
+                            <p class="text-sm text-[#684e32]/60">Passionnée de thé</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Reviews -->
+            <div class="mt-16 text-center reveal">
+                <p class="text-xl text-[#684e32]/70 mb-8">Vous avez goûté à nos spécialités ?</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://g.page/r/dummy-link/review" target="_blank" rel="noopener" class="btn-primary px-10 py-4 bg-[#684e32] text-white text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#f98948] hover:shadow-xl hover:-translate-y-1 inline-flex items-center justify-center gap-2">
+                        <i data-lucide="star" class="w-5 h-5"></i>
+                        Partager votre expérience
+                    </a>
+                    <a href="reservation.html" class="btn-secondary px-10 py-4 border-2 border-[#684e32] text-[#684e32] text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:text-white inline-flex items-center justify-center gap-2">
+                        <i data-lucide="calendar" class="w-5 h-5"></i>
+                        Réserver une table
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#4a3824] py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <h3 class="font-['Playfair_Display'] text-3xl font-bold text-[#FAF9F6] mb-5">Natyffood</h3>
+                    <p class="text-white/60 leading-relaxed">
+                        Café & Coworking<br>
+                        Au cœur du Paris 11ème
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Navigation</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Accueil</a></li>
+                        <li><a href="about.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Notre Histoire</a></li>
+                        <li><a href="menu.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Menu</a></li>
+                        <li><a href="reservation.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Réserver</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Horaires</h4>
+                    <p class="text-white/60 leading-relaxed">
+                        Lun - Ven: 8h - 19h<br>
+                        Sam - Dim: 9h - 18h
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Suivez-nous</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white/60 hover:bg-[#f98948] hover:text-white transition-all duration-300">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white/60 hover:bg-[#f98948] hover:text-white transition-all duration-300">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-10 text-center">
+                <p class="text-white/40 text-sm">&copy; 2025 Natyffood. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+
+            if (currentScroll > 100) {
+                navbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-lg', 'py-3');
+                navbar.classList.remove('py-5');
+            } else {
+                navbar.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-lg', 'py-3');
+                navbar.classList.add('py-5');
+            }
+
+            lastScroll = currentScroll;
+        });
+
+        function scrollToCategory(categoryId) {
+            const element = document.getElementById(categoryId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        const reveals = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        reveals.forEach(reveal => {
+            revealObserver.observe(reveal);
+        });
+    </script>
+</body>
+</html>

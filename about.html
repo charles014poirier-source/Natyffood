@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notre Histoire — Natyffood Café & Coworking Paris 11ème</title>
+    <meta name="description" content="Découvrez l'histoire de Natyffood, notre passion pour le café artisanal et rencontrez l'équipe passionnée derrière ce lieu unique au cœur du Paris 11ème.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        :root {
+            --tangerine: #f98948;
+            --coffee: #684e32;
+            --coffee-dark: #4a3824;
+            --cream: #FAF9F6;
+            --cream-dark: #F5F3ED;
+        }
+
+        * {
+            font-family: 'Source Sans 3', sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .paper-grain {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.012;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--coffee);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--tangerine);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn-secondary {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-secondary::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: inherit;
+            border: 2px solid var(--coffee);
+            opacity: 0;
+            transform: scale(1.1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-secondary:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .value-card {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(104, 78, 50, 0.15);
+        }
+
+        .value-card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .icon-wrapper {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .team-card {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .team-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 30px 60px -15px rgba(104, 78, 50, 0.2);
+        }
+
+        .team-card:hover .team-image {
+            transform: scale(1.08);
+        }
+
+        .team-image {
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (min-width: 768px) {
+            .card-stagger:nth-child(even) {
+                transform: translateY(40px);
+            }
+            .card-stagger:nth-child(even):hover {
+                transform: translateY(32px);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .arch-shape {
+            border-radius: 200px 200px 0 0;
+        }
+
+        .timeline-number {
+            animation: countUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        /* Animated Testimonials Team */
+        .team-image-card {
+            position: absolute;
+            inset: 0;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: bottom center;
+        }
+
+        .team-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 1.5rem;
+        }
+
+        .team-image-card.inactive {
+            opacity: 0.6;
+            transform: scale(0.92) translateY(20px);
+            z-index: 1;
+        }
+
+        .team-image-card.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            z-index: 10;
+        }
+
+        .team-content h3 {
+            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .team-content .team-quote {
+            line-height: 1.8;
+        }
+
+        .word-animate {
+            display: inline-block;
+            animation: wordFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes wordFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .team-images-container {
+                height: 400px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#FAF9F6]">
+    <div class="paper-grain"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center py-5">
+                <a href="index.html" class="font-['Playfair_Display'] text-2xl font-bold text-[#684e32] tracking-tight hover:text-[#f98948] transition-colors duration-300">
+                    Natyffood
+                </a>
+
+                <div class="hidden md:flex items-center gap-10">
+                    <a href="index.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Accueil
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="about.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Notre Histoire
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="menu.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Menu
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="reservation.html" class="btn-primary px-7 py-3 bg-[#f98948] text-white text-sm font-medium tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:shadow-xl hover:-translate-y-0.5">
+                        Réserver une Table
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden p-2.5 rounded-full hover:bg-[#684e32]/5 transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6 text-[#684e32]"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="fixed inset-0 bg-[#FAF9F6] z-50 transform translate-x-full transition-transform duration-500 md:hidden">
+            <div class="flex justify-end p-4">
+                <button id="close-menu-btn" class="p-2.5 rounded-full hover:bg-[#684e32]/5 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6 text-[#684e32]"></i>
+                </button>
+            </div>
+            <div class="flex flex-col items-center justify-center h-full gap-10">
+                <a href="index.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Accueil</a>
+                <a href="about.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Notre Histoire</a>
+                <a href="menu.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Menu</a>
+                <a href="reservation.html" class="px-10 py-4 bg-[#f98948] text-white text-lg font-medium tracking-wider uppercase rounded-full hover:bg-[#684e32] transition-all">
+                    Réserver
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 md:pt-40 md:pb-28">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="animate-fade-up">
+                    <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-6">À Propos</p>
+                    <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#684e32] leading-[0.95] mb-8">
+                        Notre <em class="text-[#f98948] font-light italic">Histoire</em>
+                    </h1>
+                    <p class="text-xl text-[#684e32]/60 leading-relaxed mb-10 max-w-xl">
+                        Une passion pour le café, un amour pour le partage, et une vision : créer un lieu où chaque moment devient une expérience.
+                    </p>
+                </div>
+                <div class="animate-scale-in delay-2">
+                    <div class="arch-shape overflow-hidden shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=800&h=800&fit=crop"
+                             alt="Ambiance chaleureuse du café"
+                             class="w-full h-[500px] object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="py-20 md:py-28">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center mb-24">
+                <div>
+                    <div class="rounded-[32px] overflow-hidden shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&h=600&fit=crop"
+                             alt="L'équipe au travail"
+                             class="w-full h-[500px] object-cover">
+                    </div>
+                </div>
+                <div class="reveal">
+                    <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">L'Origine</p>
+                    <h2 class="text-4xl md:text-5xl font-bold text-[#684e32] mb-8">
+                        Une aventure <em class="text-[#f98948] font-light italic">commencée en 2020</em>
+                    </h2>
+                    <div class="space-y-6 text-[#684e32]/60 text-lg leading-relaxed">
+                        <p>
+                            Tout a commencé par une idée simple mais ambitieuse : créer un lieu qui réunisse la passion du café artisanal et la convivialité d'un espace de travail partagé.
+                        </p>
+                        <p>
+                            Nathalie, notre fondatrice, après des années passées à explorer les meilleures cafeterias du monde, de Melbourne à Stockholm en passant par Portland, a décidé de ramener cette culture caféière à Paris.
+                        </p>
+                        <p>
+                            Le choix du 11ème arrondissement ne devait rien au hasard : ce quartier vibrant, créatif et authentique incarnait parfaitement les valeurs que nous voulions transmettre.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="order-2 lg:order-1 reveal">
+                    <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">Notre Vision</p>
+                    <h2 class="text-4xl md:text-5xl font-bold text-[#684e32] mb-8">
+                        Notre <em class="text-[#f98948] font-light italic">philosophie</em>
+                    </h2>
+                    <div class="space-y-6 text-[#684e32]/60 text-lg leading-relaxed">
+                        <p>
+                            Chez Natyffood, nous croyons que le café n'est pas juste une boisson, c'est une expérience. Chaque grain est sélectionné avec soin auprès de producteurs qui partagent nos valeurs éthiques et durables.
+                        </p>
+                        <p>
+                            Notre cuisine ? Elle puise ses inspirations dans les saisons et les producteurs locaux. Chaque plat raconte une histoire, celle d'un terroir, d'un producteur, d'une rencontre.
+                        </p>
+                        <p>
+                            Notre espace de coworking ? Il est pensé pour inspirer. Calme, lumineux, confortable, il vous offre l'environnement idéal pour créer, collaborer, et vous épanouir.
+                        </p>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <div class="rounded-[32px] overflow-hidden shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&h=600&fit=crop"
+                             alt="Préparation du café"
+                             class="w-full h-[500px] object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-20 md:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">Ce Qui Nous Anime</p>
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-bold text-[#684e32]">
+                    Nos <em class="text-[#f98948] font-light italic">Valeurs</em>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="value-card bg-[#FAF9F6] p-10 rounded-[32px] shadow-lg card-stagger reveal">
+                    <div class="icon-wrapper w-20 h-20 bg-[#684e32] rounded-2xl flex items-center justify-center mb-8 shadow-lg">
+                        <i data-lucide="heart" class="w-10 h-10 text-[#f9ea9a]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#684e32] mb-4">Passion</h3>
+                    <p class="text-[#684e32]/60 leading-relaxed">
+                        Nous mettons notre cœur dans chaque tasse, chaque plat, chaque accueil. La passion n'est pas un mot à la mode, c'est notre moteur quotidien.
+                    </p>
+                </div>
+
+                <div class="value-card bg-[#FAF9F6] p-10 rounded-[32px] shadow-lg card-stagger reveal">
+                    <div class="icon-wrapper w-20 h-20 bg-[#684e32] rounded-2xl flex items-center justify-center mb-8 shadow-lg">
+                        <i data-lucide="leaf" class="w-10 h-10 text-[#f9ea9a]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#684e32] mb-4">Durabilité</h3>
+                    <p class="text-[#684e32]/60 leading-relaxed">
+                        Producteurs locaux, circuits courts, emballages éco-responsables. Chaque choix compte pour réduire notre empreinte environnementale.
+                    </p>
+                </div>
+
+                <div class="value-card bg-[#FAF9F6] p-10 rounded-[32px] shadow-lg card-stagger reveal">
+                    <div class="icon-wrapper w-20 h-20 bg-[#684e32] rounded-2xl flex items-center justify-center mb-8 shadow-lg">
+                        <i data-lucide="users" class="w-10 h-10 text-[#f9ea9a]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#684e32] mb-4">Convivialité</h3>
+                    <p class="text-[#684e32]/60 leading-relaxed">
+                        Natyffood est un lieu de rencontres, d'échanges, de partage. Nous créons des liens, une communauté, une seconde maison pour nos clients.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-20 md:py-28">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">L'Équipe</p>
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-bold text-[#684e32]">
+                    Notre <em class="text-[#f98948] font-light italic">Équipe</em>
+                </h2>
+                <p class="text-xl text-[#684e32]/60 max-w-2xl mx-auto mt-6">
+                    Les talents passionnés qui font de Natyffood ce lieu unique
+                </p>
+            </div>
+
+            <!-- Animated Testimonials Team -->
+            <div class="animated-testimonials" id="animated-testimonials">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
+                    <!-- Images Stack -->
+                    <div class="team-images-container relative h-[500px] w-full" id="team-images">
+                        <!-- Images will be injected by JS -->
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex flex-col justify-between py-4">
+                        <div class="team-content" id="team-content">
+                            <h3 class="text-3xl md:text-4xl font-bold text-[#684e32] mb-2 transition-all duration-300"></h3>
+                            <p class="text-[#f98948] font-semibold mb-6 transition-all duration-300"></p>
+                            <p class="text-lg text-[#684e32]/70 leading-relaxed team-quote transition-all duration-300"></p>
+                        </div>
+
+                        <!-- Navigation -->
+                        <div class="flex gap-4 pt-12">
+                            <button id="prev-btn" class="h-12 w-12 rounded-full bg-[#FAF9F6] hover:bg-[#684e32] flex items-center justify-center transition-all duration-300 group border-2 border-[#684e32]/20 hover:border-[#684e32]">
+                                <i data-lucide="chevron-left" class="w-6 h-6 text-[#684e32] group-hover:text-white transition-colors duration-300"></i>
+                            </button>
+                            <button id="next-btn" class="h-12 w-12 rounded-full bg-[#FAF9F6] hover:bg-[#684e32] flex items-center justify-center transition-all duration-300 group border-2 border-[#684e32]/20 hover:border-[#684e32]">
+                                <i data-lucide="chevron-right" class="w-6 h-6 text-[#684e32] group-hover:text-white transition-colors duration-300"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-20 md:py-28 bg-gradient-to-br from-[#684e32] to-[#4a3824]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <p class="text-sm font-semibold text-[#f9ea9a] tracking-[0.3em] uppercase mb-4">Évolutions</p>
+                <h2 class="text-4xl md:text-5xl font-bold text-white">
+                    Notre <em class="text-[#f9ea9a] font-light italic">Parcours</em>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-10">
+                <div class="text-center reveal">
+                    <div class="w-24 h-24 bg-[#FAF9F6] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                        <span class="text-5xl font-bold text-[#684e32] timeline-number">1</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">2020</h3>
+                    <p class="text-white/80 leading-relaxed">
+                        Naissance du projet Natyffood et ouverture de nos portes au 42 rue de la Roquette
+                    </p>
+                </div>
+
+                <div class="text-center reveal">
+                    <div class="w-24 h-24 bg-[#FAF9F6] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                        <span class="text-5xl font-bold text-[#684e32] timeline-number">2</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">2021</h3>
+                    <p class="text-white/80 leading-relaxed">
+                        Lancement de notre espace de coworking et partenariat avec des producteurs locaux
+                    </p>
+                </div>
+
+                <div class="text-center reveal">
+                    <div class="w-24 h-24 bg-[#FAF9F6] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                        <span class="text-5xl font-bold text-[#684e32] timeline-number">3</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">2023</h3>
+                    <p class="text-white/80 leading-relaxed">
+                        Thomas devient champion de France de latte art, reconnaissance de notre excellence caféière
+                    </p>
+                </div>
+
+                <div class="text-center reveal">
+                    <div class="w-24 h-24 bg-[#FAF9F6] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                        <span class="text-5xl font-bold text-[#684e32] timeline-number">4</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">2025</h3>
+                    <p class="text-white/80 leading-relaxed">
+                        Aujourd'hui, nous continuons d'écrire cette belle aventure avec vous, nos clients précieux
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-28 md:py-36">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center reveal">
+            <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-6">Rejoindre</p>
+            <h2 class="text-4xl md:text-6xl font-bold text-[#684e32] mb-8">
+                Rejoignez notre <em class="text-[#f98948] font-light italic">aventure</em>
+            </h2>
+            <p class="text-xl text-[#684e32]/60 mb-12 max-w-2xl mx-auto leading-relaxed">
+                Vous aussi, faites partie de l'histoire de Natyffood. On a hâte de vous rencontrer !
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                <a href="reservation.html" class="btn-primary px-12 py-5 bg-[#f98948] text-white text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:shadow-2xl hover:-translate-y-1 text-center">
+                    Réserver une Table
+                </a>
+                <a href="menu.html" class="btn-secondary px-12 py-5 border-2 border-[#684e32] text-[#684e32] text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:text-white text-center">
+                    Découvrir le Menu
+                </a>
+            </div>
+            <a href="index.html" class="inline-flex items-center gap-2 text-[#684e32] hover:text-[#f98948] transition-colors font-semibold">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                Retour à l'accueil
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#4a3824] py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <h3 class="font-['Playfair_Display'] text-3xl font-bold text-[#FAF9F6] mb-5">Natyffood</h3>
+                    <p class="text-white/60 leading-relaxed">
+                        Café & Coworking<br>
+                        Au cœur du Paris 11ème
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Navigation</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Accueil</a></li>
+                        <li><a href="about.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Notre Histoire</a></li>
+                        <li><a href="menu.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Menu</a></li>
+                        <li><a href="reservation.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Réserver</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Horaires</h4>
+                    <p class="text-white/60 leading-relaxed">
+                        Lun - Ven: 8h - 19h<br>
+                        Sam - Dim: 9h - 18h
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Suivez-nous</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white/60 hover:bg-[#f98948] hover:text-white transition-all duration-300">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white/60 hover:bg-[#f98948] hover:text-white transition-all duration-300">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-10 text-center">
+                <p class="text-white/40 text-sm">&copy; 2025 Natyffood. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+
+            if (currentScroll > 100) {
+                navbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-lg', 'py-3');
+                navbar.classList.remove('py-5');
+            } else {
+                navbar.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-lg', 'py-3');
+                navbar.classList.add('py-5');
+            }
+
+            lastScroll = currentScroll;
+        });
+
+        const reveals = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+
+                    // Animate timeline numbers
+                    const timelineNumbers = entry.target.querySelectorAll('.timeline-number');
+                    timelineNumbers.forEach((el, index) => {
+                        setTimeout(() => {
+                            el.style.opacity = '1';
+                        }, index * 200);
+                    });
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        reveals.forEach(reveal => {
+            revealObserver.observe(reveal);
+        });
+
+        // Animated Testimonials Team Carousel
+        const teamMembers = [
+            {
+                name: "Nathalie",
+                role: "Fondatrice",
+                quote: "Passionnée de café et entrepreneuse dans l'âme, elle a créé Natyffood avec une vision : l'excellence et l'authenticité. Chaque détail compte pour offrir une expérience unique.",
+                image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=600&fit=crop&crop=face"
+            },
+            {
+                name: "Thomas",
+                role: "Chef Barista",
+                quote: "Champion de France de latte art 2023, il transforme chaque café en une œuvre d'art éphémère. Sa passion et sa créativité se reflètent dans chaque tasse qu'il prépare.",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop&crop=face"
+            },
+            {
+                name: "Marie",
+                role: "Chef Cuisinière",
+                quote: "Ancienne du Restaurant Pierre Gagnaire, elle sublime les produits locaux avec créativité et générosité. Ses plats racontent des histoires de terroir et de passion.",
+                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=600&fit=crop&crop=face"
+            },
+            {
+                name: "Julien",
+                role: "Pâtissier",
+                quote: "Formé chez Fauchon, il crée des desserts qui réconcilient tradition et modernité, avec toujours cette touche de gourmandise qui fait sa signature.",
+                image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=600&fit=crop&crop=face"
+            }
+        ];
+
+        let currentMember = 0;
+        const teamImagesContainer = document.getElementById('team-images');
+        const teamContent = document.getElementById('team-content');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Initialize images
+        function initTeamImages() {
+            teamImagesContainer.innerHTML = '';
+            teamMembers.forEach((member, index) => {
+                const card = document.createElement('div');
+                card.className = `team-image-card ${index === 0 ? 'active' : 'inactive'}`;
+                card.innerHTML = `<img src="${member.image}" alt="${member.name}">`;
+                teamImagesContainer.appendChild(card);
+            });
+            updateContent(0);
+        }
+
+        // Update content with animation
+        function updateContent(index) {
+            const member = teamMembers[index];
+            const h3 = teamContent.querySelector('h3');
+            const role = teamContent.querySelector('p:first-of-type');
+            const quote = teamContent.querySelector('.team-quote');
+
+            // Trigger reflow for animation
+            h3.style.animation = 'none';
+            h3.offsetHeight; // Trigger reflow
+            h3.style.animation = 'slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+
+            h3.textContent = member.name;
+            role.textContent = member.role;
+
+            // Animate quote word by word
+            const words = member.quote.split(' ');
+            quote.innerHTML = words.map((word, i) =>
+                `<span class="word-animate" style="animation-delay: ${i * 0.02}s">${word} </span>`
+            ).join('');
+        }
+
+        // Update images
+        function updateImages(activeIndex) {
+            const cards = teamImagesContainer.querySelectorAll('.team-image-card');
+            cards.forEach((card, index) => {
+                if (index === activeIndex) {
+                    card.classList.remove('inactive');
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                    card.classList.add('inactive');
+                }
+            });
+        }
+
+        // Navigation handlers
+        function showNext() {
+            currentMember = (currentMember + 1) % teamMembers.length;
+            updateImages(currentMember);
+            updateContent(currentMember);
+        }
+
+        function showPrev() {
+            currentMember = (currentMember - 1 + teamMembers.length) % teamMembers.length;
+            updateImages(currentMember);
+            updateContent(currentMember);
+        }
+
+        prevBtn.addEventListener('click', showPrev);
+        nextBtn.addEventListener('click', showNext);
+
+        // Initialize
+        initTeamImages();
+
+        // Optional: Auto-play
+        let autoPlayInterval;
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(showNext, 5000);
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+
+        // Start auto-play (optional)
+        startAutoPlay();
+
+        // Pause on hover
+        const testimonialSection = document.getElementById('animated-testimonials');
+        testimonialSection.addEventListener('mouseenter', stopAutoPlay);
+        testimonialSection.addEventListener('mouseleave', startAutoPlay);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réserver — Natyffood Café & Coworking</title>
+    <meta name="description" content="Réservez votre espace de coworking ou votre salle de réunion chez Natyffood. Café artisanal, WiFi rapide, ambiance inspirante.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* ========================================
+           VARIABLES CSS CUSTOMISÉES
+           ======================================== */
+        :root {
+            --tangerine: #f98948;
+            --coffee: #684e32;
+            --coffee-dark: #4a3824;
+            --cream: #FAF9F6;
+            --cream-dark: #F5F3ED;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        /* ========================================
+           TYPOGRAPHIE ET BASE
+           ======================================== */
+        * {
+            font-family: 'Source Sans 3', sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ========================================
+           PAPER GRAIN TEXTURE
+           ======================================== */
+        .paper-grain {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.012;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        /* ========================================
+           CUSTOM SCROLLBAR
+           ======================================== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--coffee);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--tangerine);
+        }
+
+        /* ========================================
+           ANIMATIONS
+           ======================================== */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .animate-fade-up {
+            animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .animate-slide-right {
+            animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* ========================================
+           BUTTON STYLES
+           ======================================== */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ========================================
+           CARD STYLES
+           ======================================== */
+        .card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card-sticky {
+            position: sticky;
+            top: 120px;
+        }
+
+        /* ========================================
+           FORM ELEMENTS
+           ======================================== */
+        .form-input {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e5e5;
+        }
+
+        .form-input:focus {
+            border-color: var(--tangerine);
+            box-shadow: 0 0 0 4px rgba(249, 137, 72, 0.1);
+            outline: none;
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--coffee);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.visible {
+            display: block;
+            animation: slideInRight 0.3s ease;
+        }
+
+        /* ========================================
+           RADIO BUTTONS CUSTOM
+           ======================================== */
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .radio-option {
+            position: relative;
+            flex: 1;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border: 2px solid #e5e5e5;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--coffee);
+        }
+
+        .radio-label.flex-col {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label {
+            border-color: var(--tangerine);
+            background: rgba(249, 137, 72, 0.05);
+            color: var(--tangerine);
+        }
+
+        .radio-option:hover .radio-label {
+            border-color: var(--coffee);
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label:hover {
+            border-color: var(--tangerine);
+        }
+
+        /* ========================================
+           CAFÉ OPTIONS
+           ======================================== */
+        .cafe-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border: 2px solid #e5e5e5;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cafe-option:hover {
+            border-color: var(--coffee);
+            transform: translateX(4px);
+        }
+
+        .cafe-option.selected {
+            border-color: var(--tangerine);
+            background: rgba(249, 137, 72, 0.05);
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 2px solid var(--coffee);
+            background: white;
+            color: var(--coffee);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        .quantity-btn:hover {
+            background: var(--coffee);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .quantity-btn:active {
+            transform: scale(0.95);
+        }
+
+        .quantity-value {
+            font-weight: 600;
+            min-width: 2rem;
+            text-align: center;
+            color: var(--coffee);
+        }
+
+        /* ========================================
+           BADGES
+           ======================================== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge-primary {
+            background: rgba(249, 137, 72, 0.1);
+            color: var(--tangerine);
+        }
+
+        .badge-secondary {
+            background: rgba(104, 78, 50, 0.1);
+            color: var(--coffee);
+        }
+
+        /* ========================================
+           MODAL
+           ======================================== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        /* ========================================
+           SPINNER LOADING
+           ======================================== */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========================================
+           ACCESSIBILITY
+           ======================================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus visible for keyboard navigation */
+        *:focus-visible {
+            outline: 3px solid var(--tangerine);
+            outline-offset: 2px;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 1024px) {
+            .card-sticky {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .radio-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#FAF9F6]">
+    <!-- Paper grain overlay -->
+    <div class="paper-grain"></div>
+
+    <!-- ========================================
+         NAVIGATION STICKY
+         ======================================== -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-sm transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <a href="index.html" class="font-['Playfair_Display'] text-2xl font-bold text-[#684e32] tracking-tight hover:text-[#f98948] transition-colors duration-300">
+                    Natyffood
+                </a>
+
+                <!-- Desktop menu -->
+                <div class="hidden md:flex items-center gap-10">
+                    <a href="index.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Accueil
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="about.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Notre Histoire
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="reservation.html" class="text-sm font-medium text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Réserver une Table
+                        <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-[#f98948]"></span>
+                    </a>
+                    <a href="menu.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Menu
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="index.html#contact" class="btn-primary px-7 py-3 bg-[#f98948] text-white text-sm font-medium tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:shadow-xl hover:-translate-y-0.5">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2.5 rounded-full hover:bg-[#684e32]/5 transition-colors" aria-label="Ouvrir le menu">
+                    <i data-lucide="menu" class="w-6 h-6 text-[#684e32]"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-[#FAF9F6] z-50 transform translate-x-full transition-transform duration-500 md:hidden">
+            <div class="flex justify-end p-4">
+                <button id="close-menu-btn" class="p-2.5 rounded-full hover:bg-[#684e32]/5 transition-colors" aria-label="Fermer le menu">
+                    <i data-lucide="x" class="w-6 h-6 text-[#684e32]"></i>
+                </button>
+            </div>
+            <div class="flex flex-col items-center justify-center h-full gap-10">
+                <a href="index.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Accueil</a>
+                <a href="about.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Notre Histoire</a>
+                <a href="reservation.html" class="text-4xl font-['Playfair_Display'] text-[#f98948] transition-colors duration-300">Réserver une Table</a>
+                <a href="menu.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Menu</a>
+                <a href="index.html#contact" class="px-10 py-4 bg-[#f98948] text-white text-lg font-medium tracking-wider uppercase rounded-full hover:bg-[#684e32] transition-all">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========================================
+         HERO SECTION
+         ======================================== -->
+    <section class="relative pt-32 pb-16 bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center animate-fade-up">
+                <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-6">Réservation</p>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#684e32] leading-tight mb-6">
+                    Réserve ta table,<br>savoure ton <em class="text-[#f98948] font-light italic">moment</em>
+                </h1>
+                <p class="text-xl text-[#684e32]/70 max-w-2xl mx-auto mb-8 leading-relaxed">
+                    Cuisine gourmande et café artisanal dans un cadre chaleureux. Réservez votre table pour déguster nos créations.
+                </p>
+
+                <!-- Badges -->
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <div class="badge badge-primary animate-scale-in delay-1">
+                        <i data-lucide="utensils" class="w-4 h-4"></i>
+                        <span>Cuisine maison</span>
+                    </div>
+                    <div class="badge badge-secondary animate-scale-in delay-2">
+                        <i data-lucide="coffee" class="w-4 h-4"></i>
+                        <span>Café artisanal</span>
+                    </div>
+                    <div class="badge badge-secondary animate-scale-in delay-3">
+                        <i data-lucide="heart" class="w-4 h-4"></i>
+                        <span>Ambiance cosy</span>
+                    </div>
+                </div>
+
+                <!-- Hero image -->
+                <div class="relative max-w-4xl mx-auto mt-12 animate-scale-in delay-2">
+                    <div class="rounded-[32px] overflow-hidden shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&h=500&fit=crop"
+                             alt="Espace de coworking moderne et café"
+                             class="w-full h-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         MAIN CONTENT - RÉSERVATION
+         ======================================== -->
+    <main class="py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-8 items-start">
+                <!-- ========================================
+                     COLONNE GAUCHE : FORMULAIRE
+                     ======================================== -->
+                <div class="animate-fade-up">
+                    <div class="card rounded-3xl shadow-xl p-8">
+                        <h2 class="text-3xl font-bold text-[#684e32] mb-8">Formulaire de Réservation</h2>
+
+                        <form id="reservation-form" novalidate>
+                            <!-- TYPE DE RÉSERVATION -->
+                            <div class="mb-8">
+                                <label class="form-label" id="reservation-type-label">
+                                    Type de réservation <span class="text-[#f98948]">*</span>
+                                </label>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" role="radiogroup" aria-labelledby="reservation-type-label">
+                                    <div class="radio-option">
+                                        <input type="radio" name="reservationType" id="type-table" value="table" checked aria-describedby="reservation-type-desc">
+                                        <label class="radio-label flex-col" for="type-table">
+                                            <i data-lucide="utensils" class="w-6 h-6 mb-1"></i>
+                                            <span class="font-semibold">Table pour manger</span>
+                                            <span class="text-xs text-[#684e32]/60 font-normal">Petit-déjeuner, déjeuner ou dîner</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" name="reservationType" id="type-poste" value="poste" aria-describedby="reservation-type-desc">
+                                        <label class="radio-label flex-col" for="type-poste">
+                                            <i data-lucide="laptop" class="w-6 h-6 mb-1"></i>
+                                            <span class="font-semibold">Poste de travail</span>
+                                            <span class="text-xs text-[#684e32]/60 font-normal">Espace de coworking</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" name="reservationType" id="type-salle" value="salle" aria-describedby="reservation-type-desc">
+                                        <label class="radio-label flex-col" for="type-salle">
+                                            <i data-lucide="users" class="w-6 h-6 mb-1"></i>
+                                            <span class="font-semibold">Salle de réunion</span>
+                                            <span class="text-xs text-[#684e32]/60 font-normal">Jusqu'à 8 personnes</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <p id="reservation-type-desc" class="sr-only">Choisissez le type de réservation : table pour manger, poste de travail ou salle de réunion</p>
+                            </div>
+
+                            <!-- DATE -->
+                            <div class="mb-6">
+                                <label for="reservation-date" class="form-label">
+                                    Date <span class="text-[#f98948]">*</span>
+                                </label>
+                                <input type="date" id="reservation-date" name="date" required class="form-input w-full px-4 py-3 rounded-xl" aria-invalid="false" aria-describedby="date-error">
+                                <p id="date-error" class="error-message" role="alert"></p>
+                            </div>
+
+                            <!-- OPTIONS POUR TABLE -->
+                            <div id="table-options" class="mb-6">
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label for="table-time" class="form-label">
+                                            Heure <span class="text-[#f98948]">*</span>
+                                        </label>
+                                        <input type="time" id="table-time" name="tableTime" class="form-input w-full px-4 py-3 rounded-xl" aria-invalid="false" aria-describedby="table-time-error">
+                                        <p id="table-time-error" class="error-message" role="alert"></p>
+                                    </div>
+                                    <div>
+                                        <label for="table-guests" class="form-label">
+                                            Nombre de personnes <span class="text-[#f98948]">*</span>
+                                        </label>
+                                        <select id="table-guests" name="tableGuests" class="form-input w-full px-4 py-3 rounded-xl" aria-describedby="table-guests-desc">
+                                            <option value="">Nombre de personnes</option>
+                                            <option value="1">1 personne</option>
+                                            <option value="2">2 personnes</option>
+                                            <option value="3">3 personnes</option>
+                                            <option value="4">4 personnes</option>
+                                            <option value="5">5 personnes</option>
+                                            <option value="6">6 personnes</option>
+                                            <option value="7">7 personnes</option>
+                                            <option value="8">8+ personnes (nous contacter)</option>
+                                        </select>
+                                        <p id="table-guests-desc" class="text-sm text-[#684e32]/60 mt-2">
+                                            Pour les groupes de 8+ personnes, appelez-nous
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label">Type de repas</label>
+                                    <div class="flex flex-wrap gap-3">
+                                        <label class="flex items-center gap-2 p-3 border-2 border-[#e5e5e5] rounded-xl cursor-pointer hover:border-[#684e32] transition-colors">
+                                            <input type="radio" name="mealType" value="petit-dejeuner" class="w-4 h-4 text-[#f98948]" checked>
+                                            <span class="text-[#684e32]">Petit-déjeuner</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 p-3 border-2 border-[#e5e5e5] rounded-xl cursor-pointer hover:border-[#684e32] transition-colors">
+                                            <input type="radio" name="mealType" value="dejeuner" class="w-4 h-4 text-[#f98948]">
+                                            <span class="text-[#684e32]">Déjeuner</span>
+                                        </label>
+                                        <label class="flex items-center gap-2 p-3 border-2 border-[#e5e5e5] rounded-xl cursor-pointer hover:border-[#684e32] transition-colors">
+                                            <input type="radio" name="mealType" value="diner" class="w-4 h-4 text-[#f98948]">
+                                            <span class="text-[#684e32]">Dîner</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- OPTIONS POUR POSTE -->
+                            <div id="poste-options" class="hidden mb-6">
+                                <label class="form-label" for="poste-duration">
+                                    Durée <span class="text-[#f98948]">*</span>
+                                </label>
+                                <select id="poste-duration" name="posteDuration" class="form-input w-full px-4 py-3 rounded-xl" aria-describedby="poste-duration-desc">
+                                    <option value="">Sélectionnez une durée</option>
+                                    <option value="hour">À l'heure (6€/h)</option>
+                                    <option value="halfday">Demi-journée - 4h (20€)</option>
+                                    <option value="fullday">Journée - 8h (35€)</option>
+                                </select>
+                                <p id="poste-duration-desc" class="text-sm text-[#684e32]/60 mt-2">
+                                    Choisissez la durée qui vous convient le mieux
+                                </p>
+                            </div>
+
+                            <!-- OPTIONS POUR SALLE -->
+                            <div id="salle-options" class="hidden">
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label for="start-time" class="form-label">
+                                            Heure de début <span class="text-[#f98948]">*</span>
+                                        </label>
+                                        <input type="time" id="start-time" name="startTime" class="form-input w-full px-4 py-3 rounded-xl" aria-invalid="false" aria-describedby="start-time-error">
+                                        <p id="start-time-error" class="error-message" role="alert"></p>
+                                    </div>
+                                    <div>
+                                        <label for="end-time" class="form-label">
+                                            Heure de fin <span class="text-[#f98948]">*</span>
+                                        </label>
+                                        <input type="time" id="end-time" name="endTime" class="form-input w-full px-4 py-3 rounded-xl" aria-invalid="false" aria-describedby="end-time-error">
+                                        <p id="end-time-error" class="error-message" role="alert"></p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="salle-capacity" class="form-label">
+                                        Nombre de personnes <span class="text-[#f98948]">*</span>
+                                    </label>
+                                    <select id="salle-capacity" name="salleCapacity" class="form-input w-full px-4 py-3 rounded-xl" aria-describedby="salle-capacity-desc">
+                                        <option value="">Sélectionnez le nombre de personnes</option>
+                                        <option value="2">2-4 personnes (20€/h)</option>
+                                        <option value="5">5-8 personnes (30€/h)</option>
+                                    </select>
+                                    <p id="salle-capacity-desc" class="text-sm text-[#684e32]/60 mt-2">
+                                        Capacité maximale de 8 personnes
+                                    </p>
+                                </div>
+
+                                <!-- MATÉRIEL DISPONIBLE -->
+                                <div>
+                                    <label class="form-label">Matériel supplémentaire</label>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center gap-3 p-3 border-2 border-[#e5e5e5] rounded-xl cursor-pointer hover:border-[#684e32] transition-colors">
+                                            <input type="checkbox" name="equipment" value="screen" class="w-5 h-5 text-[#f98948] rounded focus:ring-[#f98948]">
+                                            <span class="flex-1 text-[#684e32]">Écran de présentation</span>
+                                            <span class="text-[#f98948] font-semibold">+5€</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 p-3 border-2 border-[#e5e5e5] rounded-xl cursor-pointer hover:border-[#684e32] transition-colors">
+                                            <input type="checkbox" name="equipment" value="board" class="w-5 h-5 text-[#f98948] rounded focus:ring-[#f98948]">
+                                            <span class="flex-1 text-[#684e32]">Tableau blanc</span>
+                                            <span class="text-[#f98948] font-semibold">+3€</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- INFOS PERSONNELLES -->
+                            <div class="border-t-2 border-[#e5e5e5] my-8"></div>
+
+                            <div class="mb-6">
+                                <label for="customer-name" class="form-label">
+                                    Nom complet <span class="text-[#f98948]">*</span>
+                                </label>
+                                <input type="text" id="customer-name" name="name" required class="form-input w-full px-4 py-3 rounded-xl" placeholder="Jean Dupont" aria-invalid="false" aria-describedby="name-error">
+                                <p id="name-error" class="error-message" role="alert"></p>
+                            </div>
+
+                            <div class="mb-6">
+                                <label for="customer-email" class="form-label">
+                                    Email <span class="text-[#f98948]">*</span>
+                                </label>
+                                <input type="email" id="customer-email" name="email" required class="form-input w-full px-4 py-3 rounded-xl" placeholder="jean@exemple.fr" aria-invalid="false" aria-describedby="email-error">
+                                <p id="email-error" class="error-message" role="alert"></p>
+                            </div>
+
+                            <div class="mb-6">
+                                <label for="customer-phone" class="form-label">
+                                    Téléphone <span class="text-[#f98948]">*</span>
+                                </label>
+                                <input type="tel" id="customer-phone" name="phone" required class="form-input w-full px-4 py-3 rounded-xl" placeholder="06 12 34 56 78" aria-invalid="false" aria-describedby="phone-error">
+                                <p id="phone-error" class="error-message" role="alert"></p>
+                            </div>
+
+                            <div class="mb-8">
+                                <label for="customer-message" class="form-label">
+                                    Message (optionnel)
+                                </label>
+                                <textarea id="customer-message" name="message" rows="3" class="form-input w-full px-4 py-3 rounded-xl resize-none" placeholder="Précisions, demandes particulières..."></textarea>
+                            </div>
+
+                            <!-- CONDITIONS -->
+                            <div class="mb-8">
+                                <label class="flex items-start gap-3 cursor-pointer">
+                                    <input type="checkbox" id="terms" name="terms" required class="w-5 h-5 mt-0.5 text-[#f98948] rounded focus:ring-[#f98948]" aria-invalid="false" aria-describedby="terms-error">
+                                    <span class="text-[#684e32]/80 text-sm">
+                                        J'accepte les <a href="#" class="text-[#f98948] underline hover:no-underline">conditions générales</a> et la politique de confidentialité <span class="text-[#f98948]">*</span>
+                                    </span>
+                                </label>
+                                <p id="terms-error" class="error-message" role="alert"></p>
+                            </div>
+
+                            <!-- BOUTON SUBMIT -->
+                            <button type="submit" id="submit-btn" class="btn-primary w-full py-4 bg-[#f98948] text-white text-lg font-semibold tracking-wider uppercase rounded-xl hover:bg-[#684e32] hover:shadow-xl hover:-translate-y-1 transition-all">
+                                <span id="submit-text">Confirmer la réservation</span>
+                                <span id="submit-spinner" class="spinner hidden" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- ========================================
+                         OPTIONS CAFÉ (UPSELL)
+                         ======================================== -->
+                    <div class="card rounded-3xl shadow-xl p-8 mt-8 animate-fade-up delay-1">
+                        <h3 class="text-2xl font-bold text-[#684e32] mb-2">Options Café</h3>
+                        <p class="text-[#684e32]/60 mb-6">Ajoutez des boissons et gourmandises à votre réservation</p>
+
+                        <div id="cafe-options" class="space-y-4">
+                            <!-- Les options seront générées par JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================
+                     COLONNE DROITE : RÉCAPITULATIF STICKY
+                     ======================================== -->
+                <div class="lg:pl-4 animate-slide-right">
+                    <div class="card card-sticky rounded-3xl shadow-xl p-8">
+                        <h3 class="text-2xl font-bold text-[#684e32] mb-6">Récapitulatif</h3>
+
+                        <!-- RÉCAP RÉSERVATION -->
+                        <div id="summary-reservation" class="mb-6 pb-6 border-b-2 border-[#e5e5e5]">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-[#684e32]/60">Type</span>
+                                <span id="summary-type" class="font-semibold text-[#684e32]">Poste de travail</span>
+                            </div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-[#684e32]/60">Date</span>
+                                <span id="summary-date" class="font-semibold text-[#684e32]">—</span>
+                            </div>
+                            <div id="summary-duration-row" class="flex items-center justify-between mb-3">
+                                <span class="text-[#684e32]/60">Durée</span>
+                                <span id="summary-duration" class="font-semibold text-[#684e32]">—</span>
+                            </div>
+                            <div id="summary-capacity-row" class="hidden flex items-center justify-between mb-3">
+                                <span class="text-[#684e32]/60">Personnes</span>
+                                <span id="summary-capacity" class="font-semibold text-[#684e32]">—</span>
+                            </div>
+                            <div id="summary-equipment-row" class="hidden">
+                                <span class="text-[#684e32]/60 block mb-2">Matériel</span>
+                                <div id="summary-equipment" class="space-y-1"></div>
+                            </div>
+                        </div>
+
+                        <!-- RÉCAP CAFÉ -->
+                        <div id="summary-cafe-section" class="mb-6 pb-6 border-b-2 border-[#e5e5e5] hidden">
+                            <span class="text-[#684e32]/60 block mb-2">Options Café</span>
+                            <div id="summary-cafe" class="space-y-1"></div>
+                        </div>
+
+                        <!-- TOTAL -->
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[#684e32]/60">Sous-total</span>
+                                <span id="summary-subtotal" class="text-[#684e32]">0,00 €</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[#684e32]/60">TVA (10%)</span>
+                                <span id="summary-tax" class="text-[#684e32]">0,00 €</span>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t-2 border-[#e5e5e5]">
+                                <span class="text-xl font-bold text-[#684e32]">Total</span>
+                                <span id="summary-total" class="text-3xl font-bold text-[#f98948]">0,00 €</span>
+                            </div>
+                        </div>
+
+                        <!-- BOUTON DOWNLOAD (caché par défaut) -->
+                        <button id="download-btn" type="button" class="hidden w-full mt-6 py-3 bg-[#684e32] text-white text-sm font-semibold tracking-wider uppercase rounded-xl hover:bg-[#f98948] hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            <span>Télécharger le récap</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED]">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#684e32] mb-6">
+                Vous avez faim ?
+            </h2>
+            <p class="text-xl text-[#684e32]/70 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Découvrez notre menu complet avec tous nos cafés artisanaux, plats gourmands et desserts maison
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="menu.html" class="btn-primary px-10 py-4 bg-[#684e32] text-white text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#f98948] hover:shadow-xl hover:-translate-y-1 inline-flex items-center justify-center gap-2">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    Voir le Menu
+                </a>
+                <a href="index.html" class="btn-secondary px-10 py-4 border-2 border-[#684e32] text-[#684e32] text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:text-white inline-flex items-center justify-center gap-2">
+                    <i data-lucide="home" class="w-5 h-5"></i>
+                    Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         FOOTER
+         ======================================== -->
+    <footer class="bg-[#4a3824] py-16 mt-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <h3 class="font-['Playfair_Display'] text-3xl font-bold text-[#FAF9F6] mb-5">Natyffood</h3>
+                    <p class="text-white/60 leading-relaxed">
+                        Café & Coworking<br>
+                        Au cœur du Paris 11ème
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Navigation</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Accueil</a></li>
+                        <li><a href="about.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Notre Histoire</a></li>
+                        <li><a href="menu.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Menu</a></li>
+                        <li><a href="reservation.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Réserver</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Horaires</h4>
+                    <p class="text-white/60 leading-relaxed">
+                        Lun - Ven: 8h - 19h<br>
+                        Sam - Dim: 9h - 18h
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Contact</h4>
+                    <p class="text-white/60 leading-relaxed mb-4">
+                        42 rue de la Roquette<br>
+                        75011 Paris
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white/60 hover:bg-[#f98948] hover:text-white transition-all duration-300" aria-label="Instagram">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white/60 hover:bg-[#f98948] hover:text-white transition-all duration-300" aria-label="Facebook">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-10 text-center">
+                <p class="text-white/40 text-sm">&copy; 2025 Natyffood. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================
+         MODAL DE CONFIRMATION
+         ======================================== -->
+    <div id="confirmation-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-[#22c55e]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="check" class="w-10 h-10 text-[#22c55e]"></i>
+                </div>
+                <h2 id="modal-title" class="text-3xl font-bold text-[#684e32] mb-4">Réservation Confirmée !</h2>
+                <p class="text-[#684e32]/60 mb-6">Votre réservation a été enregistrée avec succès</p>
+
+                <div class="bg-[#FAF9F6] rounded-2xl p-6 mb-6">
+                    <p class="text-sm text-[#684e32]/60 mb-2">Numéro de réservation</p>
+                    <p id="reservation-number" class="text-2xl font-bold text-[#f98948] font-['Playfair_Display']">CM-2026-0001</p>
+                </div>
+
+                <div id="modal-summary" class="text-left space-y-2 mb-6 text-sm text-[#684e32]/80">
+                    <!-- Récapitulatif sera inséré ici -->
+                </div>
+
+                <div class="flex gap-3">
+                    <button id="close-modal-btn" type="button" class="flex-1 py-3 bg-[#684e32] text-white font-semibold rounded-xl hover:bg-[#f98948] transition-colors">
+                        Fermer
+                    </button>
+                    <button id="modal-download-btn" type="button" class="flex-1 py-3 border-2 border-[#684e32] text-[#684e32] font-semibold rounded-xl hover:bg-[#684e32] hover:text-white transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Télécharger</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         JAVASCRIPT
+         ======================================== -->
+    <script>
+        // ========================================
+        // CONFIGURATION ET PRIX
+        // ========================================
+
+        /**
+         * Configuration des tarifs
+         * Modifiez ces valeurs pour ajuster les prix
+         */
+        const PRICING = {
+            // Coworking (poste)
+            coworking: {
+                hour: 6,        // À l'heure
+                halfday: 20,    // Demi-journée (4h)
+                fullday: 35     // Journée (8h)
+            },
+            // Salle de réunion
+            meetingRoom: {
+                small: 20,      // 2-4 personnes par heure
+                large: 30       // 5-8 personnes par heure
+            },
+            // Matériel salle
+            equipment: {
+                screen: 5,
+                board: 3
+            },
+            // Options café
+            cafe: {
+                espresso: 2.5,
+                latte: 4.5,
+                cappuccino: 4,
+                cookie: 3,
+                croissant: 2.5,
+                sandwich: 8
+            },
+            // TVA
+            taxRate: 0.10
+        };
+
+        /**
+         * Labels pour les options café
+         */
+        const CAFE_OPTIONS = [
+            { id: 'espresso', name: 'Espresso', price: PRICING.cafe.espresso, icon: 'coffee' },
+            { id: 'latte', name: 'Café Latte', price: PRICING.cafe.latte, icon: 'coffee' },
+            { id: 'cappuccino', name: 'Cappuccino', price: PRICING.cafe.cappuccino, icon: 'coffee' },
+            { id: 'cookie', name: 'Cookie', price: PRICING.cafe.cookie, icon: 'cookie' },
+            { id: 'croissant', name: 'Croissant', price: PRICING.cafe.croissant, icon: 'croissant' },
+            { id: 'sandwich', name: 'Sandwich', price: PRICING.cafe.sandwich, icon: 'sandwich' }
+        ];
+
+        // ========================================
+        // ÉTAT DE L'APPLICATION
+        // ========================================
+
+        const state = {
+            reservationType: 'table',
+            date: null,
+            tableTime: '',
+            tableGuests: '',
+            posteDuration: '',
+            startTime: '',
+            endTime: '',
+            salleCapacity: '',
+            equipment: [],
+            cafeOptions: {},
+            customerInfo: {},
+            subtotal: 0,
+            tax: 0,
+            total: 0,
+            reservationNumber: null
+        };
+
+        // ========================================
+        // INITIALISATION
+        // ========================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialiser les icônes Lucide
+            lucide.createIcons();
+
+            // Initialiser le menu mobile
+            initMobileMenu();
+
+            // Initialiser les options café
+            initCafeOptions();
+
+            // Initialiser les écouteurs d'événements
+            initEventListeners();
+
+            // Définir la date minimum à aujourd'hui
+            setMinDate();
+
+            // Afficher les options appropriées selon le type sélectionné
+            toggleReservationOptions();
+
+            // Mettre à jour le récapitulatif initial
+            updateSummary();
+        });
+
+        // ========================================
+        // MENU MOBILE
+        // ========================================
+
+        function initMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('translate-x-full');
+            });
+
+            closeMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('translate-x-full');
+                });
+            });
+        }
+
+        // ========================================
+        // OPTIONS CAFÉ
+        // ========================================
+
+        function initCafeOptions() {
+            const container = document.getElementById('cafe-options');
+
+            CAFE_OPTIONS.forEach(option => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'cafe-option';
+                optionEl.id = `cafe-${option.id}`;
+                optionEl.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-[#FAF9F6] rounded-lg flex items-center justify-center">
+                            <i data-lucide="${option.icon}" class="w-5 h-5 text-[#684e32]"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#684e32]">${option.name}</p>
+                            <p class="text-sm text-[#684e32]/60">${option.price.toFixed(2)} €</p>
+                        </div>
+                    </div>
+                    <div class="quantity-control">
+                        <button type="button" class="quantity-btn" data-action="decrease" data-id="${option.id}" aria-label="Retirer ${option.name}">−</button>
+                        <span class="quantity-value" id="quantity-${option.id}">0</span>
+                        <button type="button" class="quantity-btn" data-action="increase" data-id="${option.id}" aria-label="Ajouter ${option.name}">+</button>
+                    </div>
+                `;
+
+                container.appendChild(optionEl);
+
+                // Initialiser la quantité à 0
+                state.cafeOptions[option.id] = 0;
+            });
+
+            // Réinitialiser les icônes après l'ajout
+            lucide.createIcons();
+
+            // Ajouter les écouteurs d'événements pour les boutons
+            container.addEventListener('click', handleCafeOptionClick);
+        }
+
+        function handleCafeOptionClick(e) {
+            if (e.target.classList.contains('quantity-btn')) {
+                const action = e.target.dataset.action;
+                const id = e.target.dataset.id;
+
+                if (action === 'increase') {
+                    state.cafeOptions[id]++;
+                } else if (action === 'decrease' && state.cafeOptions[id] > 0) {
+                    state.cafeOptions[id]--;
+                }
+
+                // Mettre à jour l'affichage
+                document.getElementById(`quantity-${id}`).textContent = state.cafeOptions[id];
+
+                // Mettre à jour la classe 'selected'
+                const optionEl = document.getElementById(`cafe-${id}`);
+                if (state.cafeOptions[id] > 0) {
+                    optionEl.classList.add('selected');
+                } else {
+                    optionEl.classList.remove('selected');
+                }
+
+                // Mettre à jour le récapitulatif
+                updateSummary();
+            }
+        }
+
+        // ========================================
+        // ÉVÉNEMENTS FORMULAIRE
+        // ========================================
+
+        function initEventListeners() {
+            // Changement de type de réservation
+            document.querySelectorAll('input[name="reservationType"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    state.reservationType = e.target.value;
+                    toggleReservationOptions();
+                    updateSummary();
+                });
+            });
+
+            // Date
+            document.getElementById('reservation-date').addEventListener('change', (e) => {
+                state.date = e.target.value;
+                clearError('reservation-date');
+                updateSummary();
+            });
+
+            // Heure pour table
+            document.getElementById('table-time').addEventListener('change', (e) => {
+                state.tableTime = e.target.value;
+                clearError('table-time');
+                updateSummary();
+            });
+
+            // Nombre de personnes pour table
+            document.getElementById('table-guests').addEventListener('change', (e) => {
+                state.tableGuests = e.target.value;
+                updateSummary();
+            });
+
+            // Durée pour poste
+            document.getElementById('poste-duration').addEventListener('change', (e) => {
+                state.posteDuration = e.target.value;
+                updateSummary();
+            });
+
+            // Heures pour salle
+            document.getElementById('start-time').addEventListener('change', (e) => {
+                state.startTime = e.target.value;
+                clearError('start-time');
+                validateTimeRange();
+                updateSummary();
+            });
+
+            document.getElementById('end-time').addEventListener('change', (e) => {
+                state.endTime = e.target.value;
+                clearError('end-time');
+                validateTimeRange();
+                updateSummary();
+            });
+
+            // Capacité salle
+            document.getElementById('salle-capacity').addEventListener('change', (e) => {
+                state.salleCapacity = e.target.value;
+                updateSummary();
+            });
+
+            // Matériel
+            document.querySelectorAll('input[name="equipment"]').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    state.equipment = Array.from(document.querySelectorAll('input[name="equipment"]:checked')).map(cb => cb.value);
+                    updateSummary();
+                });
+            });
+
+            // Informations personnelles
+            ['customer-name', 'customer-email', 'customer-phone'].forEach(id => {
+                document.getElementById(id).addEventListener('input', () => {
+                    clearError(id);
+                });
+            });
+
+            // Clear error pour les nouveaux champs table
+            ['table-time', 'table-guests'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', () => {
+                        clearError(id);
+                    });
+                }
+            });
+
+            document.getElementById('terms').addEventListener('change', () => {
+                clearError('terms');
+            });
+
+            // Soumission du formulaire
+            document.getElementById('reservation-form').addEventListener('submit', handleSubmit);
+
+            // Modal
+            document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+            document.getElementById('modal-download-btn').addEventListener('click', downloadSummary);
+            document.getElementById('download-btn').addEventListener('click', downloadSummary);
+
+            // Fermer modal en cliquant à l'extérieur
+            document.getElementById('confirmation-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'confirmation-modal') {
+                    closeModal();
+                }
+            });
+        }
+
+        // ========================================
+        // LOGIQUE FORMULAIRE
+        // ========================================
+
+        function toggleReservationOptions() {
+            const tableOptions = document.getElementById('table-options');
+            const posteOptions = document.getElementById('poste-options');
+            const salleOptions = document.getElementById('salle-options');
+
+            // Cacher toutes les options d'abord
+            tableOptions.classList.add('hidden');
+            posteOptions.classList.add('hidden');
+            salleOptions.classList.add('hidden');
+
+            // Afficher les options appropriées
+            if (state.reservationType === 'table') {
+                tableOptions.classList.remove('hidden');
+            } else if (state.reservationType === 'poste') {
+                posteOptions.classList.remove('hidden');
+            } else if (state.reservationType === 'salle') {
+                salleOptions.classList.remove('hidden');
+            }
+        }
+
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('reservation-date').setAttribute('min', today);
+        }
+
+        function validateTimeRange() {
+            if (state.startTime && state.endTime) {
+                const start = parseTime(state.startTime);
+                const end = parseTime(state.endTime);
+
+                if (end <= start) {
+                    showError('end-time', 'L\'heure de fin doit être après l\'heure de début');
+                    return false;
+                }
+
+                clearError('end-time');
+                return true;
+            }
+            return true;
+        }
+
+        function parseTime(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        // ========================================
+        // CALCUL ET RÉCAPITULATIF
+        // ========================================
+
+        function calculateTotal() {
+            let subtotal = 0;
+
+            // Calculer le prix de la réservation
+            if (state.reservationType === 'table') {
+                // Table pour manger - réservation gratuite
+                // Seules les options café sont payantes
+            } else if (state.reservationType === 'poste') {
+                // Poste de travail
+                switch (state.posteDuration) {
+                    case 'hour':
+                        subtotal += PRICING.coworking.hour;
+                        break;
+                    case 'halfday':
+                        subtotal += PRICING.coworking.halfday;
+                        break;
+                    case 'fullday':
+                        subtotal += PRICING.coworking.fullday;
+                        break;
+                }
+            } else if (state.reservationType === 'salle') {
+                // Salle de réunion
+                if (state.startTime && state.endTime && state.salleCapacity) {
+                    const startMinutes = parseTime(state.startTime);
+                    const endMinutes = parseTime(state.endTime);
+                    const hours = (endMinutes - startMinutes) / 60;
+
+                    const hourlyRate = state.salleCapacity === '2' ? PRICING.meetingRoom.small : PRICING.meetingRoom.large;
+                    subtotal += hourlyRate * hours;
+
+                    // Ajouter le matériel
+                    state.equipment.forEach(item => {
+                        subtotal += PRICING.equipment[item];
+                    });
+                }
+            }
+
+            // Ajouter les options café
+            CAFE_OPTIONS.forEach(option => {
+                subtotal += state.cafeOptions[option.id] * option.price;
+            });
+
+            // Calculer la TVA et le total
+            const tax = subtotal * PRICING.taxRate;
+            const total = subtotal + tax;
+
+            return { subtotal, tax, total };
+        }
+
+        function updateSummary() {
+            const { subtotal, tax, total } = calculateTotal();
+
+            state.subtotal = subtotal;
+            state.tax = tax;
+            state.total = total;
+
+            // Type de réservation
+            const typeLabels = {
+                'table': 'Table pour manger',
+                'poste': 'Poste de travail',
+                'salle': 'Salle de réunion'
+            };
+            document.getElementById('summary-type').textContent = typeLabels[state.reservationType] || '—';
+
+            // Date
+            const dateEl = document.getElementById('summary-date');
+            if (state.date) {
+                const formattedDate = new Date(state.date).toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                dateEl.textContent = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+            } else {
+                dateEl.textContent = '—';
+            }
+
+            // Durée ou horaires
+            const durationRow = document.getElementById('summary-duration-row');
+            const durationEl = document.getElementById('summary-duration');
+            const capacityRow = document.getElementById('summary-capacity-row');
+            const capacityEl = document.getElementById('summary-capacity');
+            const equipmentRow = document.getElementById('summary-equipment-row');
+            const equipmentEl = document.getElementById('summary-equipment');
+
+            if (state.reservationType === 'table') {
+                durationRow.classList.remove('hidden');
+                capacityRow.classList.remove('hidden');
+                equipmentRow.classList.add('hidden');
+
+                // Heure
+                durationEl.textContent = state.tableTime || '—';
+
+                // Nombre de personnes
+                const guestLabels = {
+                    '1': '1 personne',
+                    '2': '2 personnes',
+                    '3': '3 personnes',
+                    '4': '4 personnes',
+                    '5': '5 personnes',
+                    '6': '6 personnes',
+                    '7': '7 personnes',
+                    '8': '8+ personnes'
+                };
+                capacityEl.textContent = guestLabels[state.tableGuests] || '—';
+            } else if (state.reservationType === 'poste') {
+                durationRow.classList.remove('hidden');
+                capacityRow.classList.add('hidden');
+                equipmentRow.classList.add('hidden');
+
+                const durationLabels = {
+                    'hour': 'À l\'heure',
+                    'halfday': 'Demi-journée (4h)',
+                    'fullday': 'Journée (8h)'
+                };
+                durationEl.textContent = durationLabels[state.posteDuration] || '—';
+            } else if (state.reservationType === 'salle') {
+                durationRow.classList.remove('hidden');
+                capacityRow.classList.remove('hidden');
+                equipmentRow.classList.remove('hidden');
+
+                // Horaire
+                if (state.startTime && state.endTime) {
+                    const startHours = Math.floor(parseTime(state.startTime) / 60);
+                    const endHours = Math.floor(parseTime(state.endTime) / 60);
+                    const durationHours = (parseTime(state.endTime) - parseTime(state.startTime)) / 60;
+                    durationEl.textContent = `${state.startTime} - ${state.endTime} (${durationHours}h)`;
+                } else {
+                    durationEl.textContent = '—';
+                }
+
+                // Capacité
+                const capacityLabels = {
+                    '2': '2-4 personnes',
+                    '5': '5-8 personnes'
+                };
+                capacityEl.textContent = capacityLabels[state.salleCapacity] || '—';
+
+                // Matériel
+                equipmentEl.innerHTML = '';
+                if (state.equipment.length > 0) {
+                    const equipmentLabels = {
+                        'screen': 'Écran de présentation',
+                        'board': 'Tableau blanc'
+                    };
+                    state.equipment.forEach(item => {
+                        const price = PRICING.equipment[item];
+                        equipmentEl.innerHTML += `
+                            <div class="flex justify-between text-sm">
+                                <span class="text-[#684e32]/60">${equipmentLabels[item]}</span>
+                                <span class="text-[#684e32]">+${price.toFixed(2)} €</span>
+                            </div>
+                        `;
+                    });
+                }
+            }
+
+            // Options café
+            const cafeSection = document.getElementById('summary-cafe-section');
+            const cafeEl = document.getElementById('summary-cafe');
+
+            const hasCafeOptions = Object.values(state.cafeOptions).some(qty => qty > 0);
+
+            if (hasCafeOptions) {
+                cafeSection.classList.remove('hidden');
+                cafeEl.innerHTML = '';
+
+                CAFE_OPTIONS.forEach(option => {
+                    if (state.cafeOptions[option.id] > 0) {
+                        const lineTotal = state.cafeOptions[option.id] * option.price;
+                        cafeEl.innerHTML += `
+                            <div class="flex justify-between text-sm">
+                                <span class="text-[#684e32]/60">${option.name} × ${state.cafeOptions[option.id]}</span>
+                                <span class="text-[#684e32]">+${lineTotal.toFixed(2)} €</span>
+                            </div>
+                        `;
+                    }
+                });
+            } else {
+                cafeSection.classList.add('hidden');
+            }
+
+            // Totaux
+            document.getElementById('summary-subtotal').textContent = subtotal.toFixed(2) + ' €';
+            document.getElementById('summary-tax').textContent = tax.toFixed(2) + ' €';
+            document.getElementById('summary-total').textContent = total.toFixed(2) + ' €';
+        }
+
+        // ========================================
+        // VALIDATION
+        // ========================================
+
+        function validateForm() {
+            let isValid = true;
+
+            // Date
+            if (!state.date) {
+                showError('reservation-date', 'Veuillez sélectionner une date');
+                isValid = false;
+            }
+
+            // Type spécifique
+            if (state.reservationType === 'table') {
+                if (!state.tableTime) {
+                    showError('table-time', 'Veuillez sélectionner une heure');
+                    isValid = false;
+                }
+                if (!state.tableGuests) {
+                    showError('table-guests', 'Veuillez sélectionner le nombre de personnes');
+                    isValid = false;
+                }
+            } else if (state.reservationType === 'poste') {
+                if (!state.posteDuration) {
+                    showError('poste-duration', 'Veuillez sélectionner une durée');
+                    isValid = false;
+                }
+            } else if (state.reservationType === 'salle') {
+                if (!state.startTime) {
+                    showError('start-time', 'Veuillez sélectionner une heure de début');
+                    isValid = false;
+                }
+                if (!state.endTime) {
+                    showError('end-time', 'Veuillez sélectionner une heure de fin');
+                    isValid = false;
+                }
+                if (!state.salleCapacity) {
+                    showError('salle-capacity', 'Veuillez sélectionner le nombre de personnes');
+                    isValid = false;
+                }
+                if (!validateTimeRange()) {
+                    isValid = false;
+                }
+            }
+
+            // Informations personnelles
+            const name = document.getElementById('customer-name').value.trim();
+            const email = document.getElementById('customer-email').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const terms = document.getElementById('terms').checked;
+
+            if (!name) {
+                showError('customer-name', 'Veuillez entrer votre nom');
+                isValid = false;
+            } else if (name.length < 2) {
+                showError('customer-name', 'Le nom doit contenir au moins 2 caractères');
+                isValid = false;
+            }
+
+            if (!email) {
+                showError('customer-email', 'Veuillez entrer votre email');
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                showError('customer-email', 'Veuillez entrer un email valide');
+                isValid = false;
+            }
+
+            if (!phone) {
+                showError('customer-phone', 'Veuillez entrer votre téléphone');
+                isValid = false;
+            } else if (!isValidPhone(phone)) {
+                showError('customer-phone', 'Veuillez entrer un numéro valide');
+                isValid = false;
+            }
+
+            if (!terms) {
+                showError('terms', 'Vous devez accepter les conditions générales');
+                isValid = false;
+            }
+
+            // Sauvegarder les infos
+            state.customerInfo = { name, email, phone };
+
+            return isValid;
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function isValidPhone(phone) {
+            return /^[0-9\s\.\-]{10,}$/.test(phone);
+        }
+
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            field.classList.add('error');
+            field.setAttribute('aria-invalid', 'true');
+
+            const errorEl = document.getElementById(fieldId.replace('customer-', '').replace('reservation-', '') + '-error');
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.classList.add('visible');
+            }
+
+            // Animation shake
+            field.classList.add('animate-shake');
+            setTimeout(() => field.classList.remove('animate-shake'), 500);
+        }
+
+        function clearError(fieldId) {
+            const field = document.getElementById(fieldId);
+            field.classList.remove('error');
+            field.setAttribute('aria-invalid', 'false');
+
+            const errorEl = document.getElementById(fieldId.replace('customer-', '').replace('reservation-', '') + '-error');
+            if (errorEl) {
+                errorEl.classList.remove('visible');
+            }
+        }
+
+        // ========================================
+        // SOUMISSION
+        // ========================================
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            // Afficher le loading
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitSpinner = document.getElementById('submit-spinner');
+
+            submitBtn.disabled = true;
+            submitText.classList.add('hidden');
+            submitSpinner.classList.remove('hidden');
+
+            // Simuler une requête API (800ms)
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            // Générer un numéro de réservation
+            state.reservationNumber = generateReservationNumber();
+
+            // Réinitialiser le bouton
+            submitBtn.disabled = false;
+            submitText.classList.remove('hidden');
+            submitSpinner.classList.add('hidden');
+
+            // Afficher la modal de confirmation
+            showConfirmationModal();
+        }
+
+        function generateReservationNumber() {
+            const year = new Date().getFullYear();
+            const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+            return `CM-${year}-${random}`;
+        }
+
+        function showConfirmationModal() {
+            const modal = document.getElementById('confirmation-modal');
+            const reservationNumberEl = document.getElementById('reservation-number');
+            const summaryEl = document.getElementById('modal-summary');
+
+            reservationNumberEl.textContent = state.reservationNumber;
+
+            // Générer le récapitulatif pour la modal
+            let summaryHTML = '';
+
+            if (state.reservationType === 'poste') {
+                const durationLabels = {
+                    'hour': 'À l\'heure',
+                    'halfday': 'Demi-journée',
+                    'fullday': 'Journée'
+                };
+                summaryHTML += `<p><strong>Type:</strong> Poste de travail (${durationLabels[state.posteDuration]})</p>`;
+            } else {
+                summaryHTML += `<p><strong>Type:</strong> Salle de réunion</p>`;
+                summaryHTML += `<p><strong>Horaires:</strong> ${state.startTime} - ${state.endTime}</p>`;
+            }
+
+            const formattedDate = new Date(state.date).toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            summaryHTML += `<p><strong>Date:</strong> ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>`;
+            summaryHTML += `<p><strong>Total:</strong> ${state.total.toFixed(2)} €</p>`;
+
+            summaryEl.innerHTML = summaryHTML;
+
+            modal.classList.add('active');
+
+            // Afficher le bouton de téléchargement dans le récap
+            document.getElementById('download-btn').classList.remove('hidden');
+            document.getElementById('download-btn').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('confirmation-modal').classList.remove('active');
+        }
+
+        // ========================================
+        // TÉLÉCHARGEMENT RÉCAPITULATIF
+        // ========================================
+
+        function downloadSummary() {
+            const formattedDate = new Date(state.date).toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            let summary = `
+================================
+      NATYFFOOD - RÉSERVATION
+================================
+
+Numéro de réservation: ${state.reservationNumber}
+
+--------------------------------
+INFORMATIONS CLIENT
+--------------------------------
+Nom: ${state.customerInfo.name}
+Email: ${state.customerInfo.email}
+Téléphone: ${state.customerInfo.phone}
+
+--------------------------------
+DÉTAILS DE LA RÉSERVATION
+--------------------------------
+Type: ${state.reservationType === 'poste' ? 'Poste de travail' : 'Salle de réunion'}
+Date: ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}
+`;
+
+            if (state.reservationType === 'poste') {
+                const durationLabels = {
+                    'hour': 'À l\'heure',
+                    'halfday': 'Demi-journée (4h)',
+                    'fullday': 'Journée (8h)'
+                };
+                summary += `Durée: ${durationLabels[state.posteDuration]}\n`;
+            } else {
+                summary += `Horaires: ${state.startTime} - ${state.endTime}\n`;
+                const capacityLabels = {
+                    '2': '2-4 personnes',
+                    '5': '5-8 personnes'
+                };
+                summary += `Capacité: ${capacityLabels[state.salleCapacity]}\n`;
+
+                if (state.equipment.length > 0) {
+                    summary += `Matériel: `;
+                    const equipmentLabels = {
+                        'screen': 'Écran de présentation',
+                        'board': 'Tableau blanc'
+                    };
+                    summary += state.equipment.map(e => equipmentLabels[e]).join(', ');
+                    summary += '\n';
+                }
+            }
+
+            // Options café
+            const hasCafeOptions = Object.values(state.cafeOptions).some(qty => qty > 0);
+            if (hasCafeOptions) {
+                summary += `\nOptions Café:\n`;
+                CAFE_OPTIONS.forEach(option => {
+                    if (state.cafeOptions[option.id] > 0) {
+                        summary += `  - ${option.name} × ${state.cafeOptions[option.id]} = ${(state.cafeOptions[option.id] * option.price).toFixed(2)} €\n`;
+                    }
+                });
+            }
+
+            summary += `
+--------------------------------
+TOTAL
+--------------------------------
+Sous-total: ${state.subtotal.toFixed(2)} €
+TVA (10%): ${state.tax.toFixed(2)} €
+TOTAL: ${state.total.toFixed(2)} €
+
+================================
+Merci pour votre réservation !
+À très bientôt chez Natyffood
+42 rue de la Roquette, 75011 Paris
+================================
+`;
+
+            // Copier dans le presse-papier
+            navigator.clipboard.writeText(summary.trim()).then(() => {
+                // Feedback visuel temporaire
+                const downloadBtn = document.getElementById('download-btn');
+                const originalText = downloadBtn.innerHTML;
+                downloadBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Copié !</span>';
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    downloadBtn.innerHTML = originalText;
+                    lucide.createIcons();
+                }, 2000);
+            }).catch(() => {
+                // Fallback: télécharger comme fichier texte
+                const blob = new Blob([summary], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `reservation-${state.reservationNumber}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        // ========================================
+        // FERMETURE MODAL AVEC ÉCHAP
+        // ========================================
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
