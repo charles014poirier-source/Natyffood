@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natyffood — Café & Coworking Paris 11ème</title>
+    <meta name="description" content="Découvrez Natyffood, un café unique et espace de coworking au cœur du Paris 11ème. Café artisanal, cuisine savoureuse et espace de travail inspirant.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        :root {
+            --tangerine: #f98948;
+            --coffee: #684e32;
+            --coffee-dark: #4a3824;
+            --cream: #FAF9F6;
+            --cream-dark: #F5F3ED;
+        }
+
+        * {
+            font-family: 'Source Sans 3', sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Paper grain texture */
+        .paper-grain {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.012;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--cream);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--coffee);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--tangerine);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 1.2s ease-out forwards;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .animate-slide-left {
+            animation: slideFromLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+        .delay-7 { animation-delay: 0.7s; }
+
+        /* Premium button styles */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn-secondary {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-secondary::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: inherit;
+            border: 2px solid var(--coffee);
+            opacity: 0;
+            transform: scale(1.1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-secondary:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Card hover effects */
+        .feature-card {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(104, 78, 50, 0.15);
+        }
+
+        .feature-card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .icon-wrapper {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Image hover effects */
+        .img-container {
+            overflow: hidden;
+        }
+
+        .img-container img {
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .img-container:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Arch shapes */
+        .arch-shape {
+            border-radius: 200px 200px 0 0;
+        }
+
+        /* Staggered cards */
+        @media (min-width: 768px) {
+            .card-stagger:nth-child(even) {
+                transform: translateY(40px);
+            }
+            .card-stagger:nth-child(even):hover {
+                transform: translateY(32px);
+            }
+        }
+
+        /* Premium divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--coffee), transparent);
+            opacity: 0.2;
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Quote card */
+        .quote-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+            backdrop-filter: blur(20px);
+        }
+
+        /* Hero gradient overlay */
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%);
+        }
+
+        /* Number counter animation */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-[#FAF9F6]">
+    <!-- Paper grain overlay -->
+    <div class="paper-grain"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center py-5">
+                <a href="index.html" class="font-['Playfair_Display'] text-2xl font-bold text-[#684e32] tracking-tight hover:text-[#f98948] transition-colors duration-300">
+                    Natyffood
+                </a>
+
+                <!-- Desktop menu -->
+                <div class="hidden md:flex items-center gap-10">
+                    <a href="index.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Accueil
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="about.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Notre Histoire
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="menu.html" class="text-sm font-medium text-[#684e32] hover:text-[#f98948] transition-colors duration-300 tracking-wide relative group">
+                        Menu
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f98948] transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="reservation.html" class="btn-primary px-7 py-3 bg-[#f98948] text-white text-sm font-medium tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:shadow-xl hover:-translate-y-0.5">
+                        Réserver une Table
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2.5 rounded-full hover:bg-[#684e32]/5 transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6 text-[#684e32]"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-[#FAF9F6] z-50 transform translate-x-full transition-transform duration-500 md:hidden">
+            <div class="flex justify-end p-4">
+                <button id="close-menu-btn" class="p-2.5 rounded-full hover:bg-[#684e32]/5 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6 text-[#684e32]"></i>
+                </button>
+            </div>
+            <div class="flex flex-col items-center justify-center h-full gap-10">
+                <a href="index.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Accueil</a>
+                <a href="about.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Notre Histoire</a>
+                <a href="menu.html" class="text-4xl font-['Playfair_Display'] text-[#684e32] hover:text-[#f98948] transition-colors duration-300">Menu</a>
+                <a href="reservation.html" class="px-10 py-4 bg-[#f98948] text-white text-lg font-medium tracking-wider uppercase rounded-full hover:bg-[#684e32] transition-all">
+                    Réserver
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-28 pb-20 hero-gradient">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="animate-fade-up">
+                    <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-6">Paris 11ème</p>
+                    <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#684e32] leading-[0.95] mb-8">
+                        Votre <em class="text-[#f98948] font-light italic">sanctuaire</em> gourmand
+                    </h1>
+                    <p class="text-xl text-[#684e32]/70 leading-relaxed mb-10 max-w-xl">
+                        Un café artisanal d'exception, une cuisine réconfortante et un espace de coworking inspirant. Le 11ème comme vous ne l'avez jamais vu.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#reservation" class="btn-primary px-10 py-4 bg-[#f98948] text-white text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:shadow-2xl hover:-translate-y-1 text-center">
+                            Réserver une Table
+                        </a>
+                        <a href="menu.html" class="btn-secondary px-10 py-4 border-2 border-[#684e32] text-[#684e32] text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:text-white text-center">
+                            Voir le Menu
+                        </a>
+                    </div>
+                </div>
+                <div class="animate-scale-in delay-2 relative">
+                    <div class="aspect-[4/5] rounded-[48px] overflow-hidden shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&h=1000&fit=crop"
+                             alt="Café cosy et ambiance chaleureuse"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute -bottom-8 -left-8 quote-card p-8 rounded-3xl shadow-2xl max-w-xs animate-slide-left delay-4">
+                        <p class="font-['Playfair_Display'] text-2xl text-[#684e32] italic leading-relaxed">
+                            "Là où le café devient une expérience"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Concept Section -->
+    <section class="py-28 md:py-36">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">Le Concept</p>
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-bold text-[#684e32] mb-6">
+                    Un <em class="text-[#f98948] font-light italic">lieu unique</em> à vivre
+                </h2>
+                <p class="text-xl text-[#684e32]/60 max-w-2xl mx-auto leading-relaxed">
+                    Plus qu'un café, un véritable espace de vie où travail, détente et gastronomie se rencontrent
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="feature-card bg-white p-10 rounded-[32px] shadow-lg card-stagger reveal">
+                    <div class="icon-wrapper w-20 h-20 bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] rounded-2xl flex items-center justify-center mb-8 shadow-inner">
+                        <i data-lucide="coffee" class="w-10 h-10 text-[#684e32]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#684e32] mb-4">Café d'Exception</h3>
+                    <p class="text-[#684e32]/60 leading-relaxed">
+                        Des grains sélectionnés auprès des meilleurs torréfacteurs, préparés avec passion par nos baristas expérimentés.
+                    </p>
+                </div>
+
+                <div class="feature-card bg-white p-10 rounded-[32px] shadow-lg card-stagger reveal">
+                    <div class="icon-wrapper w-20 h-20 bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] rounded-2xl flex items-center justify-center mb-8 shadow-inner">
+                        <i data-lucide="utensils" class="w-10 h-10 text-[#684e32]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#684e32] mb-4">Cuisine Gourmande</h3>
+                    <p class="text-[#684e32]/60 leading-relaxed">
+                        Des plats faits maison avec des produits frais et locaux. Du petit-déjeuner au déjeuner, chaque bouchée est un voyage.
+                    </p>
+                </div>
+
+                <div class="feature-card bg-white p-10 rounded-[32px] shadow-lg card-stagger reveal">
+                    <div class="icon-wrapper w-20 h-20 bg-gradient-to-br from-[#FAF9F6] to-[#F5F3ED] rounded-2xl flex items-center justify-center mb-8 shadow-inner">
+                        <i data-lucide="laptop" class="w-10 h-10 text-[#684e32]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#684e32] mb-4">Coworking Inspirant</h3>
+                    <p class="text-[#684e32]/60 leading-relaxed">
+                        Un espace de travail calme et inspirant avec WiFi haute vitesse, prises électriques et ambiance propice à la créativité.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="divider"></div>
+    </div>
+
+    <!-- Gallery Section -->
+    <section class="py-28 md:py-36 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">Galerie</p>
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-bold text-[#684e32]">
+                    Notre <em class="text-[#f98948] font-light italic">univers</em>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+                <div class="col-span-2 row-span-2 reveal">
+                    <div class="arch-shape h-full overflow-hidden shadow-2xl img-container">
+                        <img src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=800&h=800&fit=crop"
+                             alt="Intérieur du café"
+                             class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="rounded-[32px] overflow-hidden shadow-xl img-container reveal">
+                    <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=400&fit=crop"
+                         alt="Latte art"
+                         class="w-full h-full object-cover aspect-square">
+                </div>
+                <div class="rounded-[32px] overflow-hidden shadow-xl img-container reveal">
+                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=400&fit=crop"
+                         alt="Petit-déjeuner gourmand"
+                         class="w-full h-full object-cover aspect-square">
+                </div>
+                <div class="rounded-[32px] overflow-hidden shadow-xl img-container reveal">
+                    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop"
+                         alt="Espace coworking"
+                         class="w-full h-full object-cover aspect-square">
+                </div>
+                <div class="rounded-[32px] overflow-hidden shadow-xl img-container reveal">
+                    <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400&h=400&fit=crop"
+                         alt="Patisseries maison"
+                         class="w-full h-full object-cover aspect-square">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Incontournables Section -->
+    <section class="py-28 md:py-36 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">Favorites</p>
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-bold text-[#684e32]">
+                    Nos <em class="text-[#f98948] font-light italic">Incontournables</em>
+                </h2>
+                <p class="text-xl text-[#684e32]/60 max-w-2xl mx-auto mt-6 leading-relaxed">
+                    Les créations qui font le succès de Natyffood, à déguster absolument
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Incontournable 1 -->
+                <div class="feature-card bg-[#FAF9F6] rounded-3xl shadow-xl overflow-hidden reveal group">
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&h=450&fit=crop"
+                             alt="Cappuccino Signature"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-2xl font-bold text-[#684e32]">Cappuccino Signature</h3>
+                            <span class="text-[#f98948] font-bold text-2xl">4,50€</span>
+                        </div>
+                        <p class="text-[#684e32]/60 leading-relaxed mb-6">
+                            Notre café signature avec lait mousseux, chocolat en poudre et une touche de cannelle.
+                        </p>
+                        <a href="menu.html#cafe" class="inline-flex items-center gap-2 text-[#f98948] font-semibold hover:gap-3 transition-all">
+                            Découvrir <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Incontournable 2 -->
+                <div class="feature-card bg-[#FAF9F6] rounded-3xl shadow-xl overflow-hidden reveal group">
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&h=450&fit=crop"
+                             alt="Croissant au Beurre"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-2xl font-bold text-[#684e32]">Croissant au Beurre</h3>
+                            <span class="text-[#f98948] font-bold text-2xl">2,50€</span>
+                        </div>
+                        <p class="text-[#684e32]/60 leading-relaxed mb-6">
+                            Pur beurre AOP Charentes-Poitou, feuilletage croustillant et cœur moelleux.
+                        </p>
+                        <a href="menu.html#petit-dejeuner" class="inline-flex items-center gap-2 text-[#f98948] font-semibold hover:gap-3 transition-all">
+                            Découvrir <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Incontournable 3 -->
+                <div class="feature-card bg-[#FAF9F6] rounded-3xl shadow-xl overflow-hidden reveal group">
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&h=450&fit=crop"
+                             alt="Burger Maison"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-2xl font-bold text-[#684e32]">Burger Maison</h3>
+                            <span class="text-[#f98948] font-bold text-2xl">16,50€</span>
+                        </div>
+                        <p class="text-[#684e32]/60 leading-relaxed mb-6">
+                            Steak français, fromage affiné, condiments maison et frites croustillantes.
+                        </p>
+                        <a href="menu.html#plats" class="inline-flex items-center gap-2 text-[#f98948] font-semibold hover:gap-3 transition-all">
+                            Découvrir <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Incontournable 4 -->
+                <div class="feature-card bg-[#FAF9F6] rounded-3xl shadow-xl overflow-hidden reveal group">
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&h=450&fit=crop"
+                             alt="Cookie Géant"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-2xl font-bold text-[#684e32]">Cookie Géant</h3>
+                            <span class="text-[#f98948] font-bold text-2xl">5,50€</span>
+                        </div>
+                        <p class="text-[#684e32]/60 leading-relaxed mb-6">
+                            Chocolat noir Valrhona, noix de pécan et fleur de sel. Signature maison !
+                        </p>
+                        <a href="menu.html#desserts" class="inline-flex items-center gap-2 text-[#f98948] font-semibold hover:gap-3 transition-all">
+                            Découvrir <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Incontournable 5 -->
+                <div class="feature-card bg-[#FAF9F6] rounded-3xl shadow-xl overflow-hidden reveal group">
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&h=450&fit=crop"
+                             alt="Matcha Latte"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-2xl font-bold text-[#684e32]">Matcha Latte</h3>
+                            <span class="text-[#f98948] font-bold text-2xl">5,50€</span>
+                        </div>
+                        <p class="text-[#684e32]/60 leading-relaxed mb-6">
+                            Thé vert matcha bio céramique, lait d'avoine onctueux et latte art.
+                        </p>
+                        <a href="menu.html#cafe" class="inline-flex items-center gap-2 text-[#f98948] font-semibold hover:gap-3 transition-all">
+                            Découvrir <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CTA Card -->
+                <div class="feature-card bg-gradient-to-br from-[#f98948] to-[#e0783d] rounded-3xl shadow-xl p-8 flex flex-col justify-center items-center text-center reveal">
+                    <div class="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="sparkles" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-white mb-4">Envie de plus ?</h3>
+                    <p class="text-white/90 leading-relaxed mb-8 max-w-sm">
+                        Découvrez notre carte complète avec tous nos cafés, plats et desserts artisanaux
+                    </p>
+                    <a href="menu.html" class="btn-primary px-10 py-4 bg-white text-[#f98948] text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#FAF9F6] hover:shadow-xl hover:-translate-y-1">
+                        Voir tout le Menu
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-28 md:py-36">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center reveal">
+            <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">Nous Rejoindre</p>
+            <h2 class="text-4xl md:text-6xl font-bold text-[#684e32] mb-8">
+                Prêt à <em class="text-[#f98948] font-light italic">nous rejoindre</em> ?
+            </h2>
+            <p class="text-xl text-[#684e32]/60 mb-12 max-w-2xl mx-auto leading-relaxed">
+                Venez découvrir notre univers et laissez-vous séduire par nos créations
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="reservation.html" class="btn-primary px-12 py-5 bg-[#f98948] text-white text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:shadow-2xl hover:-translate-y-1 text-center">
+                    Réserver une Table
+                </a>
+                <a href="menu.html" class="btn-secondary px-12 py-5 border-2 border-[#684e32] text-[#684e32] text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:text-white text-center">
+                    Voir le Menu Complet
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="py-28 md:py-36 bg-gradient-to-br from-[#684e32] to-[#4a3824]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <p class="text-sm font-semibold text-[#f9ea9a] tracking-[0.3em] uppercase mb-6">Adresse & Horaires</p>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-8">
+                        Nous trouver
+                    </h2>
+                    <p class="text-xl text-white/80 mb-12 leading-relaxed">
+                        Au cœur du vibrant 11ème arrondissement, à deux pas des meilleures adresses parisiennes
+                    </p>
+                    <div class="space-y-6 text-white/90">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-[#f98948]"></i>
+                            </div>
+                            <span class="text-lg">42 rue de la Roquette, 75011 Paris</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                                <i data-lucide="clock" class="w-5 h-5 text-[#f98948]"></i>
+                            </div>
+                            <span class="text-lg">Lun - Ven: 8h - 19h | Sam - Dim: 9h - 18h</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-[32px] overflow-hidden shadow-2xl reveal">
+                    <img src="https://images.unsplash.com/photo-1555212697-194d092e3b8f?w=800&h=600&fit=crop"
+                         alt="Façade du café"
+                         class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="py-28 md:py-36 bg-[#FAF9F6]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <p class="text-sm font-semibold text-[#f98948] tracking-[0.3em] uppercase mb-4">Témoignages</p>
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-bold text-[#684e32]">
+                    Ce qu'ils <em class="text-[#f98948] font-light italic">disent</em>
+                </h2>
+                <div class="flex items-center justify-center gap-4 mt-8">
+                    <div class="flex items-center gap-1">
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-6 h-6 text-[#f98948] fill-[#f98948]"></i>
+                    </div>
+                    <span class="text-2xl font-bold text-[#684e32]">4.9/5</span>
+                    <span class="text-[#684e32]/60">(247 avis)</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="feature-card bg-white p-10 rounded-3xl shadow-xl reveal">
+                    <div class="flex items-center gap-1 mb-6">
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                    </div>
+                    <p class="text-lg text-[#684e32]/80 leading-relaxed mb-8 italic">
+                        "Le meilleur cappuccino de Paris ! L'ambiance est cosy, parfait pour travailler ou se détendre. Je viens tous les matins avant le bureau."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face"
+                                 alt="Marie L."
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#684e32]">Marie L.</p>
+                            <p class="text-sm text-[#684e32]/60">Cliente régulière</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="feature-card bg-white p-10 rounded-3xl shadow-xl reveal">
+                    <div class="flex items-center gap-1 mb-6">
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                    </div>
+                    <p class="text-lg text-[#684e32]/80 leading-relaxed mb-8 italic">
+                        "Espace de coworking idéal. WiFi ultra rapide, prises partout, et les cookies sont à tomber ! J'y ai écrit mon premier roman."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+                                 alt="Thomas M."
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#684e32]">Thomas M.</p>
+                            <p class="text-sm text-[#684e32]/60">Écrivain</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="feature-card bg-white p-10 rounded-3xl shadow-xl reveal">
+                    <div class="flex items-center gap-1 mb-6">
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                        <i data-lucide="star" class="w-5 h-5 text-[#f98948] fill-[#f98948]"></i>
+                    </div>
+                    <p class="text-lg text-[#684e32]/80 leading-relaxed mb-8 italic">
+                        "Le burger maison est incroyable ! Produits frais, cuisine raffinée, et le service est toujours chaleureux. Mon adresse préférée du 11ème."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
+                                 alt="Sophie D."
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#684e32]">Sophie D.</p>
+                            <p class="text-sm text-[#684e32]/60">Food lover</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Reviews -->
+            <div class="mt-16 text-center reveal">
+                <p class="text-xl text-[#684e32]/70 mb-8">Vous avez testé nos créations ?</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://g.page/r/dummy-link/review" target="_blank" rel="noopener" class="btn-primary px-10 py-4 bg-[#684e32] text-white text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#f98948] hover:shadow-xl hover:-translate-y-1 inline-flex items-center justify-center gap-2">
+                        <i data-lucide="star" class="w-5 h-5"></i>
+                        Laisser un avis
+                    </a>
+                    <a href="menu.html" class="btn-secondary px-10 py-4 border-2 border-[#684e32] text-[#684e32] text-sm font-semibold tracking-wider uppercase rounded-full hover:bg-[#684e32] hover:text-white inline-flex items-center justify-center gap-2">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                        Découvrir le menu
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#4a3824] py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <h3 class="font-['Playfair_Display'] text-3xl font-bold text-[#FAF9F6] mb-5">Natyffood</h3>
+                    <p class="text-white/60 leading-relaxed">
+                        Café & Coworking<br>
+                        Au cœur du Paris 11ème
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Navigation</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Accueil</a></li>
+                        <li><a href="about.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Notre Histoire</a></li>
+                        <li><a href="menu.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Menu</a></li>
+                        <li><a href="reservation.html" class="text-white/60 hover:text-[#f98948] transition-colors duration-300">Réserver</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Horaires</h4>
+                    <p class="text-white/60 leading-relaxed">
+                        Lun - Ven: 8h - 19h<br>
+                        Sam - Dim: 9h - 18h
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[#FAF9F6] mb-5 tracking-wide uppercase text-sm">Suivez-nous</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white/60 hover:bg-[#f98948] hover:text-white transition-all duration-300">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white/60 hover:bg-[#f98948] hover:text-white transition-all duration-300">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-10 text-center">
+                <p class="text-white/40 text-sm">&copy; 2025 Natyffood. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+
+            if (currentScroll > 100) {
+                navbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-lg', 'py-3');
+                navbar.classList.remove('py-5');
+            } else {
+                navbar.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-lg', 'py-3');
+                navbar.classList.add('py-5');
+            }
+
+            lastScroll = currentScroll;
+        });
+
+        // Scroll reveal animation
+        const reveals = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        reveals.forEach(reveal => {
+            revealObserver.observe(reveal);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
